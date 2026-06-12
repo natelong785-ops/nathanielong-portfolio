@@ -2,8 +2,7 @@
 
 Personal portfolio website for APTC 495: Applied Technology Capstone at the University of Maryland Global Campus (UMGC).
 
-**Live site:** [https://yourusername.github.io/nathanielong-portfolio](https://yourusername.github.io/nathanielong-portfolio)
-
+**Live site:**(https://natelong785-ops.github.io/nathanielong-portfolio/)
 ---
 
 ## About
