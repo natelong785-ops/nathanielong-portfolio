@@ -1,0 +1,2978 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BakeOS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --c:       #3D2B1F;
+  --cg:      #C9922A;
+  --cs:      #6B8C6E;
+  --cr:      #C2736A;
+  --cream:   #FAF7F2;
+  --warm:    #F5EFE4;
+  --tan:     #E8DDD0;
+  --muted:   #8A7A6F;
+  --border:  #E0D6CA;
+  --ink:     #1C1410;
+  --danger:  #C0392B;
+  --warn:    #C9922A;
+  --ok:      #6B8C6E;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);min-height:100vh;}
+
+/* ── NAV ── */
+.nav{background:var(--c);display:flex;align-items:center;padding:0 20px;height:54px;position:sticky;top:0;z-index:100;}
+.nav-brand{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:var(--cream);margin-right:24px;letter-spacing:-.3px;white-space:nowrap;}
+.nav-links{display:flex;gap:2px;flex:1;overflow-x:auto;}
+.nav-link{font-size:12px;color:rgba(250,247,242,.5);padding:6px 11px;border-radius:6px;cursor:pointer;white-space:nowrap;background:none;border:none;font-family:'DM Sans',sans-serif;transition:all .15s;}
+.nav-link:hover{color:rgba(250,247,242,.8);}
+.nav-link.active{background:rgba(250,247,242,.12);color:var(--cream);}
+.nav-right{display:flex;align-items:center;gap:10px;margin-left:auto;}
+.nav-avatar{width:30px;height:30px;border-radius:50%;background:var(--cg);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;color:#fff;flex-shrink:0;cursor:pointer;}
+
+/* ── PAGES ── */
+.page{display:none;padding:24px 20px;max-width:1100px;margin:0 auto;animation:fadeIn .2s ease;}
+.page.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+/* ── SHARED ── */
+.page-title{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;color:var(--c);margin-bottom:4px;}
+.page-sub{font-size:13px;color:var(--muted);margin-bottom:20px;}
+.card{background:#fff;border:.5px solid var(--border);border-radius:12px;padding:16px;}
+.btn{border:none;border-radius:8px;padding:9px 16px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;cursor:pointer;transition:all .15s;}
+.btn-primary{background:var(--c);color:var(--cream);}
+.btn-primary:hover{background:#4d3628;}
+.btn-secondary{background:var(--warm);color:var(--c);border:.5px solid var(--border);}
+.btn-secondary:hover{background:var(--tan);}
+.btn-gold{background:var(--cg);color:#fff;}
+.btn-danger{background:#fef2f2;color:var(--danger);border:.5px solid #fecaca;}
+.btn-sm{padding:5px 11px;font-size:11px;}
+.input{width:100%;border:.5px solid var(--border);border-radius:8px;padding:9px 12px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--ink);background:var(--cream);outline:none;transition:border .15s;}
+.input:focus{border-color:var(--c);}
+.select{width:100%;border:.5px solid var(--border);border-radius:8px;padding:9px 12px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--ink);background:var(--cream);outline:none;cursor:pointer;}
+.label{font-size:11px;font-weight:500;color:var(--muted);margin-bottom:5px;display:block;}
+.field{margin-bottom:14px;}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
+.tag{display:inline-block;font-size:10px;padding:2px 8px;border-radius:12px;font-weight:500;}
+.tag-gold{background:#F0D49A;color:#7A5100;}
+.tag-rose{background:#F4DDD9;color:#8A3E38;}
+.tag-sage{background:#D4E4D5;color:#3D5E40;}
+.tag-brown{background:var(--warm);color:var(--c);border:.5px solid var(--border);}
+.divider{height:.5px;background:var(--border);margin:14px 0;}
+.empty-state{text-align:center;padding:60px 20px;color:var(--muted);}
+.empty-icon{font-size:40px;margin-bottom:12px;opacity:.4;}
+.empty-title{font-family:'Playfair Display',serif;font-size:18px;color:var(--c);margin-bottom:6px;}
+.empty-sub{font-size:13px;margin-bottom:20px;}
+.section-label{font-size:10px;font-weight:500;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:10px;}
+.toast{position:fixed;bottom:24px;right:24px;background:var(--c);color:var(--cream);padding:12px 18px;border-radius:10px;font-size:13px;font-weight:500;z-index:999;animation:slideUp .3s ease;display:none;}
+.toast.show{display:block;}
+@keyframes slideUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(28,20,16,.5);z-index:200;align-items:center;justify-content:center;}
+.modal-bg.open{display:flex;}
+.modal{background:#fff;border-radius:16px;padding:24px;width:100%;max-width:560px;max-height:85vh;overflow-y:auto;animation:fadeIn .2s ease;}
+.modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
+.modal-title{font-family:'Playfair Display',serif;font-size:18px;color:var(--c);}
+.modal-close{background:none;border:none;font-size:20px;cursor:pointer;color:var(--muted);padding:4px;}
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px;}
+.stat-card{background:var(--warm);border:.5px solid var(--border);border-radius:10px;padding:12px 14px;}
+.stat-val{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--c);}
+.stat-lbl{font-size:11px;color:var(--muted);margin-top:2px;}
+.ai-strip{background:var(--c);border-radius:10px;padding:14px 18px;display:flex;align-items:center;gap:14px;margin-top:16px;}
+.ai-strip-msg{font-size:13px;color:var(--cream);flex:1;line-height:1.5;}
+.ai-strip-lbl{font-size:10px;color:rgba(250,247,242,.5);margin-bottom:3px;letter-spacing:1px;text-transform:uppercase;}
+.ai-strip-btn{background:var(--cg);color:#fff;border:none;border-radius:7px;padding:7px 14px;font-size:12px;font-weight:500;cursor:pointer;white-space:nowrap;font-family:'DM Sans',sans-serif;flex-shrink:0;}
+
+/* ── DASHBOARD ── */
+.quick-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
+.quick-card{background:#fff;border:.5px solid var(--border);border-radius:10px;padding:14px;cursor:pointer;transition:border-color .15s;}
+.quick-card:hover{border-color:var(--c);}
+.quick-icon{font-size:22px;color:var(--c);margin-bottom:8px;}
+.quick-label{font-size:13px;font-weight:500;color:var(--c);}
+.quick-sub{font-size:11px;color:var(--muted);margin-top:3px;}
+.orders-list{display:flex;flex-direction:column;}
+.order-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:.5px solid var(--border);}
+.order-row:last-child{border:none;}
+.order-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.order-info{flex:1;min-width:0;}
+.order-name{font-size:13px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.order-meta{font-size:11px;color:var(--muted);}
+.order-price{font-family:'DM Mono',monospace;font-size:12px;color:var(--cg);}
+.dash-grid{display:grid;grid-template-columns:2fr 1fr;gap:14px;margin-bottom:16px;}
+
+/* ── RECIPES ── */
+.toolbar{display:flex;gap:10px;margin-bottom:14px;align-items:center;}
+.search-wrap{position:relative;flex:1;}
+.search-icon{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:14px;pointer-events:none;}
+.search{width:100%;padding:9px 12px 9px 32px;border:.5px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;background:#fff;color:var(--ink);outline:none;}
+.search:focus{border-color:var(--c);}
+.filter-tags{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap;}
+.ftag{border:.5px solid var(--border);background:#fff;border-radius:20px;padding:4px 12px;font-size:11px;color:var(--muted);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s;}
+.ftag.on{background:var(--c);color:var(--cream);border-color:var(--c);}
+.recipes-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+.recipe-card{background:#fff;border:.5px solid var(--border);border-radius:12px;overflow:hidden;cursor:pointer;transition:border-color .15s;}
+.recipe-card:hover{border-color:var(--c);}
+.recipe-img{height:80px;display:flex;align-items:center;justify-content:center;font-size:32px;}
+.recipe-body{padding:10px 12px;}
+.recipe-name{font-family:'Playfair Display',serif;font-size:14px;font-weight:700;color:var(--c);margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.recipe-meta{font-size:11px;color:var(--muted);margin-bottom:6px;}
+.recipe-footer{display:flex;justify-content:space-between;align-items:center;padding-top:8px;border-top:.5px solid var(--border);}
+.recipe-price{font-family:'DM Mono',monospace;font-size:12px;color:var(--cg);font-weight:500;}
+.add-recipe-card{background:#fff;border:.5px dashed var(--border);border-radius:12px;min-height:170px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;gap:8px;color:var(--muted);transition:all .15s;}
+.add-recipe-card:hover{border-color:var(--c);color:var(--c);}
+.add-icon{width:36px;height:36px;border-radius:50%;background:var(--warm);display:flex;align-items:center;justify-content:center;font-size:18px;}
+.ing-row{display:grid;grid-template-columns:2fr 80px 80px 28px;gap:6px;align-items:center;margin-bottom:6px;}
+.ing-input{border:.5px solid var(--border);border-radius:6px;padding:6px 9px;font-family:'DM Sans',sans-serif;font-size:12px;background:var(--cream);color:var(--ink);width:100%;outline:none;}
+.ing-input:focus{border-color:var(--c);}
+.remove-btn{background:none;border:none;color:var(--muted);cursor:pointer;font-size:18px;line-height:1;padding:0 4px;}
+.add-small-btn{background:none;border:.5px dashed var(--border);border-radius:6px;padding:6px 12px;font-size:11px;color:var(--muted);cursor:pointer;font-family:'DM Sans',sans-serif;width:100%;transition:all .15s;}
+.add-small-btn:hover{border-color:var(--c);color:var(--c);}
+.step-row{display:grid;grid-template-columns:24px 1fr 28px;gap:8px;align-items:start;margin-bottom:8px;}
+.step-num{width:24px;height:24px;border-radius:50%;background:var(--warm);border:.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;color:var(--c);flex-shrink:0;margin-top:6px;}
+.step-textarea{border:.5px solid var(--border);border-radius:6px;padding:7px 9px;font-family:'DM Sans',sans-serif;font-size:12px;background:var(--cream);color:var(--ink);width:100%;outline:none;resize:vertical;min-height:36px;}
+.step-textarea:focus{border-color:var(--c);}
+
+/* ── RECIPE DETAIL ── */
+.detail-header{display:flex;gap:20px;margin-bottom:20px;align-items:flex-start;}
+.detail-img{width:200px;height:140px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:52px;flex-shrink:0;border:.5px solid var(--border);}
+.detail-info{flex:1;}
+.detail-title{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--c);margin-bottom:6px;}
+.detail-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;}
+.detail-stats{display:flex;gap:20px;margin-bottom:12px;}
+.detail-stat-val{font-family:'DM Mono',monospace;font-size:15px;font-weight:500;color:var(--c);}
+.detail-stat-lbl{font-size:10px;color:var(--muted);}
+.detail-actions{display:flex;gap:8px;}
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.ing-list-item{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:.5px solid var(--border);}
+.ing-list-item:last-child{border:none;}
+.ing-dot{width:6px;height:6px;border-radius:50%;background:var(--cg);flex-shrink:0;}
+.ing-text{font-size:13px;color:var(--ink);}
+.ing-qty{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);margin-left:auto;}
+.step-item{display:flex;gap:10px;padding:10px 0;border-bottom:.5px solid var(--border);}
+.step-item:last-child{border:none;}
+.step-circle{width:24px;height:24px;border-radius:50%;background:var(--c);color:var(--cream);font-size:10px;font-weight:500;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+.step-text{font-size:13px;color:var(--ink);line-height:1.6;}
+.pricing-box{background:var(--c);border-radius:10px;padding:14px 16px;margin-top:12px;}
+.pricing-total{font-family:'Playfair Display',serif;font-size:26px;color:var(--cream);}
+.pricing-per{font-size:11px;color:rgba(250,247,242,.6);margin-top:4px;}
+.pricing-row{display:flex;justify-content:space-between;font-size:12px;color:rgba(250,247,242,.7);margin-bottom:5px;}
+.pricing-row-val{font-family:'DM Mono',monospace;font-size:12px;color:rgba(250,247,242,.9);}
+
+/* ── PRICING ── */
+.pricing-layout{display:grid;grid-template-columns:1.3fr 1fr;gap:16px;align-items:start;}
+.breakdown-row{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:.5px solid var(--border);}
+.breakdown-row:last-of-type{border:none;}
+.bk-label{font-size:13px;color:var(--muted);}
+.bk-val{font-family:'DM Mono',monospace;font-size:13px;color:var(--ink);}
+.total-display{background:var(--c);border-radius:10px;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;margin:14px 0 8px;}
+.total-label{font-size:11px;color:rgba(250,247,242,.5);margin-bottom:3px;}
+.total-name{font-size:11px;color:rgba(250,247,242,.35);margin-top:2px;}
+.total-val{font-family:'Playfair Display',serif;font-size:28px;color:var(--cream);}
+.per-srv{background:var(--warm);border:.5px solid var(--border);border-radius:8px;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;}
+.per-srv-val{font-family:'DM Mono',monospace;font-size:14px;color:var(--cg);font-weight:500;}
+.margin-wrap{margin-top:12px;}
+.margin-header{display:flex;justify-content:space-between;margin-bottom:6px;}
+.margin-pct{font-family:'DM Mono',monospace;font-size:14px;color:var(--cg);font-weight:500;}
+input[type=range]{width:100%;height:4px;-webkit-appearance:none;background:var(--tan);border-radius:2px;outline:none;cursor:pointer;}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:var(--c);cursor:pointer;}
+.ai-hint{background:var(--warm);border-left:3px solid var(--cg);border-radius:0 8px 8px 0;padding:10px 14px;font-size:12px;color:var(--muted);margin-top:10px;line-height:1.6;}
+.formula-box{border:.5px solid var(--border);border-radius:8px;padding:12px;margin-bottom:10px;}
+.formula-grid{display:grid;grid-template-columns:2fr 80px 80px 28px;gap:6px;align-items:center;margin-bottom:6px;}
+.formula-grid:first-child{font-size:10px;color:var(--muted);font-weight:500;padding-bottom:6px;border-bottom:.5px solid var(--border);margin-bottom:8px;}
+
+/* ── BAKING MODE ── */
+.bake-layout{display:grid;grid-template-columns:1fr 260px;gap:14px;}
+.active-step-card{background:var(--c);border-radius:14px;padding:22px;margin-bottom:14px;}
+.step-eyebrow{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:rgba(250,247,242,.45);margin-bottom:8px;}
+.step-big-title{font-family:'Playfair Display',serif;font-size:20px;color:var(--cream);margin-bottom:10px;}
+.step-big-body{font-size:13px;color:rgba(250,247,242,.75);line-height:1.7;}
+.step-nav{display:flex;align-items:center;justify-content:space-between;margin-top:18px;}
+.step-ctrl{background:rgba(250,247,242,.1);border:.5px solid rgba(250,247,242,.2);border-radius:8px;padding:8px 16px;font-size:12px;color:var(--cream);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s;}
+.step-ctrl:hover{background:rgba(250,247,242,.18);}
+.step-ctrl.primary-ctrl{background:var(--cg);border-color:var(--cg);font-weight:500;}
+.step-ctrl.primary-ctrl:hover{background:#b8811f;}
+.step-dots{font-size:12px;color:rgba(250,247,242,.4);}
+.progress-bar{height:4px;background:var(--tan);border-radius:2px;margin-bottom:16px;overflow:hidden;}
+.progress-fill{height:4px;background:var(--cg);border-radius:2px;transition:width .4s ease;}
+.timer-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px;}
+.timer-card{background:#fff;border:.5px solid var(--border);border-radius:10px;padding:10px 8px;text-align:center;cursor:pointer;transition:border-color .15s;}
+.timer-card.active-timer{border-color:var(--cg);background:#fffbf0;}
+.timer-ring{width:52px;height:52px;border-radius:50%;border:3px solid var(--tan);margin:0 auto 6px;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:12px;font-weight:500;color:var(--muted);transition:border-color .3s;}
+.timer-ring.running{border-color:var(--cg);color:var(--cg);}
+.timer-ring.done{border-color:var(--cs);color:var(--cs);}
+.timer-name-label{font-size:10px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.add-timer-card{border:.5px dashed var(--border);border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;min-height:80px;gap:5px;transition:all .15s;}
+.add-timer-card:hover{border-color:var(--c);}
+.step-checklist-item{display:flex;gap:10px;padding:9px 0;border-bottom:.5px solid var(--border);cursor:pointer;align-items:flex-start;}
+.step-checklist-item:last-child{border:none;}
+.check-dot{width:20px;height:20px;border-radius:50%;background:var(--tan);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:500;color:var(--c);margin-top:1px;transition:all .2s;}
+.check-dot.done{background:var(--cs);color:#fff;}
+.check-dot.current-step{background:var(--cg);color:#fff;}
+.check-text{font-size:12px;color:var(--ink);line-height:1.5;}
+.check-text.done-text{color:var(--muted);text-decoration:line-through;}
+.check-text.pending-text{color:#c0b0a8;}
+.ai-chat-panel{background:var(--warm);border:.5px solid var(--border);border-radius:10px;padding:12px;margin-top:12px;}
+.ai-chat-label{font-size:10px;font-weight:500;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;}
+.ai-chat-messages{max-height:200px;overflow-y:auto;margin-bottom:10px;display:flex;flex-direction:column;gap:8px;}
+.ai-bubble{background:#fff;border-radius:8px;padding:8px 11px;font-size:12px;line-height:1.6;color:var(--ink);}
+.ai-bubble.user-bubble{background:var(--c);color:var(--cream);align-self:flex-end;}
+.ai-input-row{display:flex;gap:6px;}
+.ai-chat-input{flex:1;border:.5px solid var(--border);border-radius:6px;padding:7px 10px;font-size:12px;font-family:'DM Sans',sans-serif;background:#fff;color:var(--ink);outline:none;}
+.ai-send-btn{background:var(--c);border:none;border-radius:6px;padding:7px 12px;color:var(--cream);cursor:pointer;font-size:13px;}
+.ai-thinking{font-size:12px;color:var(--muted);font-style:italic;padding:4px 0;}
+.no-recipe-selected{text-align:center;padding:60px 20px;color:var(--muted);}
+
+/* ── INVENTORY ── */
+.inv-layout{display:grid;grid-template-columns:1fr 260px;gap:14px;}
+.inv-table{width:100%;border-collapse:collapse;}
+.inv-table th{font-size:10px;font-weight:500;letter-spacing:.5px;text-transform:uppercase;color:var(--muted);text-align:left;padding:0 10px 8px 0;border-bottom:.5px solid var(--border);}
+.inv-table td{padding:10px 10px 10px 0;border-bottom:.5px solid var(--border);font-size:13px;vertical-align:middle;}
+.inv-table tr:last-child td{border:none;}
+.inv-name{font-weight:500;color:var(--ink);}
+.inv-unit{font-size:10px;color:var(--muted);}
+.bar-wrap{width:80px;height:6px;background:var(--tan);border-radius:3px;display:inline-block;vertical-align:middle;}
+.bar-fill{height:6px;border-radius:3px;}
+.status-pill{display:inline-block;font-size:10px;padding:2px 8px;border-radius:10px;font-weight:500;}
+.pill-ok{background:#EAF3DE;color:#27500A;}
+.pill-low{background:#FCEBEB;color:#791F1F;}
+.pill-warn{background:#FAEEDA;color:#633806;}
+.alert-card{margin-bottom:10px;border-left:3px solid;border-radius:0 10px 10px 0;padding:12px;}
+.alert-danger{border-left-color:#E24B4A;background:#fef7f7;}
+.alert-warn{border-left-color:#EF9F27;background:#fffbf2;}
+.alert-ai{border-left-color:var(--cs);background:#f4faf4;}
+.alert-type{font-size:9px;font-weight:500;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;}
+.alert-type.d{color:#a32d2d;}.alert-type.w{color:#854f0b;}.alert-type.a{color:#0f6e56;}
+.alert-title{font-size:12px;font-weight:500;color:var(--ink);margin-bottom:3px;}
+.alert-body{font-size:11px;color:var(--muted);line-height:1.5;margin-bottom:8px;}
+
+/* ── responsive ── */
+@media(max-width:700px){
+  .stats-row,.quick-grid,.two-col,.three-col,.recipes-grid{grid-template-columns:1fr 1fr;}
+  .dash-grid,.bake-layout,.inv-layout,.pricing-layout,.detail-grid{grid-template-columns:1fr;}
+  .detail-header{flex-direction:column;}
+  .detail-img{width:100%;}
+}
+
+/* ── SCAN MODALS ── */
+.scan-preview{width:100%;height:220px;background:#111;border-radius:10px;overflow:hidden;position:relative;display:flex;align-items:center;justify-content:center;margin-bottom:12px;}
+.scan-preview video{width:100%;height:100%;object-fit:cover;display:block;}
+.scan-overlay-line{position:absolute;left:10%;right:10%;height:2px;background:rgba(201,146,42,.85);animation:scanline 2s ease-in-out infinite;}
+@keyframes scanline{0%,100%{top:30%}50%{top:70%}}
+.scan-result-box{background:var(--warm);border:.5px solid var(--border);border-radius:8px;padding:12px;margin-bottom:10px;display:none;}
+.scan-result-box.show{display:block;}
+.img-preview{width:100%;max-height:200px;object-fit:contain;border-radius:8px;border:.5px solid var(--border);margin-bottom:10px;display:none;}
+.img-preview.show{display:block;}
+.scan-btn-row{display:flex;gap:8px;margin-bottom:10px;}
+.parsing-indicator{text-align:center;padding:16px;color:var(--muted);font-size:13px;display:none;}
+.parsing-indicator.show{display:block;}
+
+/* ── URL IMPORT ── */
+.site-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px;}
+.site-card{background:var(--warm);border:.5px solid var(--border);border-radius:10px;padding:10px 8px;text-align:center;cursor:pointer;transition:all .15s;}
+.site-card:hover{border-color:var(--c);background:var(--tan);}
+.site-card-logo{font-size:20px;margin-bottom:4px;}
+.site-card-name{font-size:10px;font-weight:500;color:var(--c);}
+.site-card-url{font-size:9px;color:var(--muted);}
+.url-status{font-size:12px;color:var(--muted);margin-top:8px;min-height:18px;}
+.url-status.error{color:var(--danger);}
+.url-status.ok{color:var(--cs);}
+.import-tabs{display:flex;gap:0;margin-bottom:16px;border:.5px solid var(--border);border-radius:8px;overflow:hidden;}
+.import-tab{flex:1;padding:8px;font-size:12px;font-weight:500;cursor:pointer;background:var(--warm);border:none;font-family:'DM Sans',sans-serif;color:var(--muted);transition:all .15s;}
+.import-tab.active{background:var(--c);color:var(--cream);}
+.import-panel{display:none;}
+.import-panel.active{display:block;}
+
+/* ── LOCAL PRICING ── */
+.location-bar{background:var(--c);border-radius:10px;padding:11px 16px;display:flex;align-items:center;gap:12px;margin-bottom:16px;}
+.location-bar-info{flex:1;min-width:0;}
+.location-label{font-size:10px;letter-spacing:1px;text-transform:uppercase;color:rgba(250,247,242,.45);margin-bottom:2px;}
+.location-name{font-size:13px;font-weight:500;color:var(--cream);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.location-btn{background:rgba(250,247,242,.12);border:.5px solid rgba(250,247,242,.2);border-radius:7px;padding:6px 12px;font-size:11px;color:var(--cream);cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap;flex-shrink:0;}
+.location-btn:hover{background:rgba(250,247,242,.2);}
+.location-loading{font-size:11px;color:rgba(250,247,242,.5);font-style:italic;}
+.price-db-row{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:.5px solid var(--border);}
+.price-db-row:last-child{border:none;}
+.price-db-name{flex:1;font-size:12px;color:var(--ink);}
+.price-db-unit{font-size:10px;color:var(--muted);width:52px;text-align:right;}
+.price-db-price{font-family:'DM Mono',monospace;font-size:12px;color:var(--cg);width:60px;text-align:right;}
+.price-db-input{width:68px;border:.5px solid var(--border);border-radius:5px;padding:4px 7px;font-family:'DM Mono',monospace;font-size:12px;color:var(--ink);background:var(--cream);outline:none;text-align:right;}
+.price-db-input:focus{border-color:var(--c);}
+.price-source{font-size:9px;padding:2px 6px;border-radius:8px;font-weight:500;flex-shrink:0;}
+.price-source.ai{background:#EEF2FF;color:#534AB7;}
+.price-source.manual{background:#D4E4D5;color:#3D5E40;}
+.currency-row{display:flex;align-items:center;gap:10px;margin-bottom:14px;padding:10px 12px;background:var(--warm);border:.5px solid var(--border);border-radius:8px;}
+.currency-label{font-size:12px;color:var(--muted);}
+.currency-symbol{font-family:'DM Mono',monospace;font-size:16px;font-weight:500;color:var(--c);}
+.ing-cost-pill{font-size:10px;color:var(--cs);background:#D4E4D5;border-radius:8px;padding:1px 6px;margin-left:4px;cursor:pointer;}
+
+/* ── MOBILE / PWA ── */
+@media(max-width:600px){
+  .nav{padding:0 12px;height:50px;}
+  .nav-brand{font-size:17px;margin-right:12px;}
+  .nav-links{gap:0;}
+  .nav-link{padding:5px 8px;font-size:11px;}
+  .nav-right .btn{display:none;}
+  .page{padding:16px 12px;}
+  .stats-row{grid-template-columns:1fr 1fr;}
+  .quick-grid{grid-template-columns:1fr 1fr;}
+  .recipes-grid{grid-template-columns:1fr 1fr;}
+  .pricing-layout{grid-template-columns:1fr;}
+  .bake-layout{grid-template-columns:1fr;}
+  .inv-layout{grid-template-columns:1fr;}
+  .dash-grid{grid-template-columns:1fr;}
+  .two-col{grid-template-columns:1fr 1fr;}
+  .three-col{grid-template-columns:1fr 1fr 1fr;}
+  .modal{padding:18px 14px;max-height:92vh;}
+  .detail-header{flex-direction:column;}
+  .detail-img{width:100%;height:120px;}
+  .detail-grid{grid-template-columns:1fr;}
+  .site-grid{grid-template-columns:repeat(2,1fr);}
+  .active-step-card{padding:16px;}
+  .step-big-title{font-size:17px;}
+  .timer-grid{grid-template-columns:repeat(3,1fr);}
+  .location-bar{flex-direction:column;align-items:flex-start;gap:8px;}
+}
+/* Safe area for notched phones */
+.nav{padding-left:max(20px, env(safe-area-inset-left));padding-right:max(20px, env(safe-area-inset-right));}
+body{padding-bottom:env(safe-area-inset-bottom);}
+
+/* Install banner */
+#install-banner{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--c);color:var(--cream);padding:14px 18px;z-index:500;flex-direction:row;align-items:center;gap:12px;box-shadow:0 -2px 20px rgba(0,0,0,.2);}
+#install-banner.show{display:flex;}
+#install-banner-text{flex:1;font-size:13px;line-height:1.4;}
+#install-banner-title{font-family:'Playfair Display',serif;font-size:15px;margin-bottom:2px;}
+#install-banner-sub{font-size:11px;color:rgba(250,247,242,.6);}
+#install-banner-btn{background:var(--cg);border:none;border-radius:8px;padding:9px 16px;color:#fff;font-size:12px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap;}
+#install-banner-dismiss{background:none;border:none;color:rgba(250,247,242,.5);font-size:20px;cursor:pointer;padding:0 4px;flex-shrink:0;}
+
+/* ── THEMING ENGINE ── */
+body.theme-dark{
+  --cream:#1A1410;--warm:#221C17;--tan:#2E251E;
+  --muted:#9A8A7F;--border:#3A2F28;--ink:#F0E8E0;
+  --c:#C9922A;--cg:#E5A93C;
+}
+body.theme-forest{
+  --cream:#F2F5F0;--warm:#E8EEE5;--tan:#D4DDD0;
+  --muted:#7A8A72;--border:#C8D4C0;--ink:#1E2A1A;
+  --c:#3D6B35;--cg:#5A9B50;
+}
+body.theme-rose{
+  --cream:#FEF5F5;--warm:#FCE8E8;--tan:#F5D0D0;
+  --muted:#9A7070;--border:#EEC0C0;--ink:#2A1010;
+  --c:#A03535;--cg:#C84848;
+}
+body.theme-midnight{
+  --cream:#0F0F18;--warm:#161620;--tan:#1E1E2C;
+  --muted:#8888AA;--border:#2A2A3E;--ink:#E0E0F0;
+  --c:#6B5FD8;--cg:#8B7FF0;
+}
+body.theme-slate{
+  --cream:#F4F6F8;--warm:#E8ECF0;--tan:#D8DFE6;
+  --muted:#7A8899;--border:#C8D4DE;--ink:#1A2433;
+  --c:#2C4A6E;--cg:#3D6EA0;
+}
+body.density-compact{--d-page:14px 12px;--d-card:12px;--d-gap:8px;--d-font:12px;--d-title:20px;}
+body.density-comfortable{--d-page:24px 20px;--d-card:16px;--d-gap:12px;--d-font:13px;--d-title:24px;}
+body.density-spacious{--d-page:36px 28px;--d-card:22px;--d-gap:18px;--d-font:14px;--d-title:28px;}
+body[class*=density-] .page{padding:var(--d-page,24px 20px);}
+body[class*=density-] .card{padding:var(--d-card,16px);}
+body[class*=density-] .recipes-grid{gap:var(--d-gap,12px);}
+body[class*=density-] .stats-row{gap:var(--d-gap,10px);}
+body[class*=density-] .page-title{font-size:var(--d-title,24px);}
+body[class*=density-] .input,.body[class*=density-] .select{font-size:var(--d-font,13px);}
+
+/* ── SETTINGS PAGE ── */
+.settings-layout{display:grid;grid-template-columns:200px 1fr;gap:20px;align-items:start;}
+.settings-nav{display:flex;flex-direction:column;gap:2px;}
+.settings-nav-item{padding:9px 14px;border-radius:8px;font-size:13px;cursor:pointer;color:var(--muted);transition:all .15s;background:none;border:none;font-family:'DM Sans',sans-serif;text-align:left;}
+.settings-nav-item:hover{background:var(--warm);color:var(--ink);}
+.settings-nav-item.active{background:var(--c);color:var(--cream);}
+.settings-section{display:none;}
+.settings-section.active{display:block;}
+.settings-block{background:#fff;border:.5px solid var(--border);border-radius:12px;padding:20px;margin-bottom:14px;}
+.settings-block-title{font-size:13px;font-weight:500;color:var(--c);margin-bottom:4px;}
+.settings-block-sub{font-size:11px;color:var(--muted);margin-bottom:16px;}
+.theme-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+.theme-swatch{border-radius:10px;overflow:hidden;cursor:pointer;border:2px solid transparent;transition:all .15s;}
+.theme-swatch.active{border-color:var(--cg);}
+.theme-swatch:hover{transform:scale(1.03);}
+.swatch-preview{height:52px;display:flex;align-items:center;justify-content:center;}
+.swatch-bar{height:12px;}
+.swatch-label{font-size:11px;font-weight:500;text-align:center;padding:6px 4px;}
+.density-row{display:flex;gap:10px;}
+.density-option{flex:1;border:.5px solid var(--border);border-radius:10px;padding:14px 10px;text-align:center;cursor:pointer;transition:all .15s;}
+.density-option:hover{border-color:var(--c);}
+.density-option.active{border-color:var(--cg);background:var(--warm);}
+.density-icon{font-size:22px;margin-bottom:6px;}
+.density-label{font-size:12px;font-weight:500;color:var(--c);}
+.density-sub{font-size:10px;color:var(--muted);margin-top:3px;}
+.accent-grid{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:14px;}
+.accent-dot{width:36px;height:36px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:all .15s;display:flex;align-items:center;justify-content:center;}
+.accent-dot:hover{transform:scale(1.12);}
+.accent-dot.active{border-color:var(--ink);}
+.accent-check{color:#fff;font-size:14px;display:none;}
+.accent-dot.active .accent-check{display:block;}
+.colour-preview-bar{height:8px;border-radius:4px;margin-bottom:12px;transition:background .3s;}
+.custom-colour-row{display:flex;align-items:center;gap:10px;margin-top:10px;}
+.settings-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:.5px solid var(--border);}
+.settings-row:last-child{border:none;}
+.settings-row-label{font-size:13px;color:var(--ink);}
+.settings-row-sub{font-size:11px;color:var(--muted);margin-top:2px;}
+.toggle-wrap{position:relative;width:40px;height:22px;flex-shrink:0;}
+.toggle-wrap input{opacity:0;width:0;height:0;position:absolute;}
+.toggle-slider{position:absolute;inset:0;background:var(--border);border-radius:11px;cursor:pointer;transition:background .2s;}
+.toggle-slider::before{content:'';position:absolute;width:16px;height:16px;left:3px;top:3px;background:#fff;border-radius:50%;transition:transform .2s;}
+.toggle-wrap input:checked + .toggle-slider{background:var(--cg);}
+.toggle-wrap input:checked + .toggle-slider::before{transform:translateX(18px);}
+.profile-avatar-big{width:72px;height:72px;border-radius:50%;background:var(--cg);display:flex;align-items:center;justify-content:center;font-size:28px;color:#fff;font-family:'Playfair Display',serif;cursor:pointer;margin-bottom:12px;}
+@media(max-width:600px){.settings-layout{grid-template-columns:1fr;} .settings-nav{flex-direction:row;flex-wrap:wrap;} .theme-grid{grid-template-columns:repeat(2,1fr);}}
+</style>
+
+  <!-- PWA -->
+  <meta name="theme-color" content="#3D2B1F">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="BakeOS">
+  <meta name="description" content="The intelligent baking ecosystem — recipes, pricing, kitchen mode and inventory in one app.">
+  <link rel="manifest" id="pwa-manifest">
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-brand">BakeOS</div>
+  <div class="nav-links">
+    <button class="nav-link active" onclick="nav('dashboard')">Dashboard</button>
+    <button class="nav-link" onclick="nav('recipes')">Recipes</button>
+    <button class="nav-link" onclick="nav('pricing')">Pricing</button>
+    <button class="nav-link" onclick="nav('kitchen')">Kitchen</button>
+    <button class="nav-link" onclick="nav('inventory')">Inventory</button>
+    <button class="nav-link" onclick="nav('settings')">&#x2699;&#xFE0F; Settings</button>
+  </div>
+  <div class="nav-right"><button class="btn btn-secondary btn-sm" onclick="openWebImport()" title="Import recipe from web" style="font-size:11px;">&#127760; Web Import</button>
+    <button class="btn btn-secondary btn-sm" onclick="openBarcodeScanner()" title="Scan barcode" style="font-size:11px;">&#128247; Barcode</button>
+    <button class="btn btn-secondary btn-sm" onclick="openRecipeScan()" title="Scan recipe photo" style="font-size:11px;">&#127859; Scan Recipe</button>
+    
+    <div class="nav-avatar" title="Your profile">B</div>
+  </div>
+</nav>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- ═══════════════════════════════════════════ DASHBOARD ═══ -->
+<div class="page active" id="page-dashboard">
+  <div class="page-title">Good morning ✦</div>
+  <div class="page-sub" id="dash-sub">Loading your bakery...</div>
+  <div class="stats-row" id="dash-stats"></div>
+  <div class="dash-grid">
+    <div>
+      <div class="section-label" style="margin-bottom:12px;">Quick actions</div>
+      <div class="quick-grid">
+        <div class="quick-card" onclick="nav('recipes');setTimeout(()=>openAddRecipe(),100)">
+          <div class="quick-icon">📖</div>
+          <div class="quick-label">New recipe</div>
+          <div class="quick-sub">Add to your library</div>
+        </div>
+        <div class="quick-card" onclick="nav('pricing')">
+          <div class="quick-icon">💰</div>
+          <div class="quick-label">Price a cake</div>
+          <div class="quick-sub">Instant breakdown</div>
+        </div>
+        <div class="quick-card" onclick="nav('kitchen')">
+          <div class="quick-icon">⏱️</div>
+          <div class="quick-label">Start baking</div>
+          <div class="quick-sub">Guided kitchen mode</div>
+        </div>
+        <div class="quick-card" onclick="nav('inventory')">
+          <div class="quick-icon">📦</div>
+          <div class="quick-label">Check stock</div>
+          <div class="quick-sub" id="inv-quick-sub">Manage ingredients</div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="section-label" style="margin-bottom:10px;">Recent recipes</div>
+      <div id="dash-recent-recipes" class="orders-list"></div>
+    </div>
+  </div>
+  <div class="ai-strip" id="dash-ai-strip">
+    <div style="flex:1">
+      <div class="ai-strip-lbl">AI tip</div>
+      <div class="ai-strip-msg" id="dash-ai-msg">Add your first recipe to get personalised insights.</div>
+    </div>
+    <button class="ai-strip-btn" onclick="nav('recipes');setTimeout(()=>openAddRecipe(),100)">Get started →</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ RECIPES ══════ -->
+<div class="page" id="page-recipes">
+  <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:4px;">
+    <div><div class="page-title">Recipe Library</div><div class="page-sub" id="recipe-count-label">Your collection</div></div>
+    <button class="btn btn-primary" onclick="openAddRecipe()" style="margin-top:4px;">+ New Recipe</button>
+  </div>
+  <div class="toolbar">
+    <div class="search-wrap"><span class="search-icon">🔍</span><input class="search" id="recipe-search" placeholder="Search recipes..." oninput="renderRecipes()"></div>
+    <button class="btn btn-secondary btn-sm" id="fav-btn" onclick="toggleFavFilter()">♡ Favourites</button>
+  </div>
+  <div class="filter-tags" id="filter-tags"></div>
+  <div class="recipes-grid" id="recipes-grid"></div>
+</div>
+
+<!-- RECIPE DETAIL (sub-page) -->
+<div class="page" id="page-recipe-detail">
+  <button class="btn btn-secondary btn-sm" onclick="nav('recipes')" style="margin-bottom:16px;">← Back to library</button>
+  <div id="recipe-detail-content"></div>
+</div>
+
+<!-- ═══════════════════════════════════════════ PRICING ══════ -->
+<div class="page" id="page-pricing">
+  <div class="page-title">Pricing Calculator</div>
+  <div class="page-sub">Build accurate, profitable prices for any cake.</div>
+
+  <!-- LOCATION BAR -->
+  <div class="location-bar" id="location-bar">
+    <div class="location-bar-info">
+      <div class="location-label">Pricing location</div>
+      <div class="location-name" id="location-display">No location set — prices may be inaccurate</div>
+    </div>
+    <div id="location-bar-actions">
+      <button class="location-btn" onclick="detectLocation()">&#x1F4CD; Detect Location</button>
+    </div>
+  </div>
+
+  <div class="pricing-layout">
+    <div class="card">
+      <div class="section-label" style="margin-bottom:12px;">Order details</div>
+      <div class="field"><label class="label">Recipe / cake name</label><input class="input" id="pc-name" value="" placeholder="e.g. Lemon Velvet Cake" oninput="recalc()"></div>
+      <div class="two-col">
+        <div class="field"><label class="label">Cake size</label>
+          <select class="select" id="pc-size" onchange="recalc()">
+            <option>6-inch</option><option selected>8-inch</option><option>10-inch</option><option>12-inch</option>
+          </select>
+        </div>
+        <div class="field"><label class="label">Servings</label><input class="input" type="number" id="pc-servings" value="12" min="1" oninput="recalc()"></div>
+      </div>
+      <div class="two-col">
+        <div class="field"><label class="label">Your hourly rate ($)</label><input class="input" type="number" id="pc-rate" value="18" oninput="recalc()"></div>
+        <div class="field"><label class="label">Hours of labour</label><input class="input" type="number" id="pc-hours" value="3" step="0.5" oninput="recalc()"></div>
+      </div>
+      <div class="divider"></div>
+      <div class="section-label" style="margin-bottom:8px;">Ingredients &amp; costs</div>
+      <div style="display:grid;grid-template-columns:2fr 80px 80px 28px;gap:6px;margin-bottom:6px;">
+        <span style="font-size:10px;color:var(--muted);font-weight:500;">Item</span>
+        <span style="font-size:10px;color:var(--muted);font-weight:500;">Unit</span>
+        <span style="font-size:10px;color:var(--muted);font-weight:500;">Cost ($)</span>
+        <span></span>
+      </div>
+      <div id="ing-list"></div>
+      <button class="add-small-btn" onclick="addIngRow()">+ Add ingredient</button>
+      <div class="divider"></div>
+      <div class="field"><label class="label">Packaging cost ($)</label><input class="input" type="number" id="pc-packaging" value="3" step="0.50" oninput="recalc()"></div>
+    </div>
+    <div>
+      <div class="card" style="margin-bottom:12px;">
+        <div class="section-label" style="margin-bottom:12px;">Live breakdown</div>
+        <div class="breakdown-row"><span class="bk-label">Ingredient cost</span><span class="bk-val" id="bk-ing">$0.00</span></div>
+        <div class="breakdown-row"><span class="bk-label">Packaging</span><span class="bk-val" id="bk-pack">$0.00</span></div>
+        <div class="breakdown-row"><span class="bk-label">Labour</span><span class="bk-val" id="bk-labour">$0.00</span></div>
+        <div class="breakdown-row"><span class="bk-label">Overhead (10%)</span><span class="bk-val" id="bk-overhead">$0.00</span></div>
+        <div class="breakdown-row"><span class="bk-label">Profit margin</span><span class="bk-val" id="bk-margin">$0.00</span></div>
+        <div class="total-display">
+          <div><div class="total-label">Recommended price</div><div class="total-name" id="bk-name">—</div></div>
+          <div class="total-val" id="bk-total">$0.00</div>
+        </div>
+        <div class="per-srv"><span style="font-size:12px;color:var(--muted);">Per serving</span><span class="per-srv-val" id="bk-persrv">—</span></div>
+        <div class="margin-wrap">
+          <div class="margin-header"><span class="label" style="margin:0;">Profit margin</span><span class="margin-pct" id="margin-pct-display">25%</span></div>
+          <input type="range" min="5" max="60" value="25" step="1" id="margin-slider" oninput="recalc()">
+          <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:var(--muted);">5%</span><span style="font-size:10px;color:var(--muted);">60%</span></div>
+        </div>
+        <div class="ai-hint" id="pricing-ai-hint">💡 Fill in the details above to get AI pricing insights.</div>
+        <button class="btn btn-primary" style="width:100%;margin-top:12px;" onclick="savePricingToRecipe()">Save to recipe</button>
+      </div>
+
+      <!-- LOCAL PRICE DATABASE PANEL -->
+      <div class="card" style="margin-top:12px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+          <div class="section-label" style="margin:0;">Local ingredient prices</div>
+          <button class="btn btn-secondary btn-sm" onclick="refreshLocalPrices()">&#x21BB; Refresh AI prices</button>
+        </div>
+        <div class="currency-row">
+          <span class="currency-label">Currency</span>
+          <span class="currency-symbol" id="currency-symbol">$</span>
+          <input class="input" id="currency-code" value="USD" style="width:64px;font-family:'DM Mono',monospace;font-size:12px;" oninput="saveCurrencyPref()">
+          <span style="font-size:11px;color:var(--muted);margin-left:4px;">Click ingredients below to auto-fill costs</span>
+        </div>
+        <div id="price-db-list"><div style="text-align:center;color:var(--muted);font-size:12px;padding:16px 0;">Set your location above to load local prices.</div></div>
+        <button class="add-small-btn" style="margin-top:8px;" onclick="openAddPriceItem()">+ Add custom price</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ KITCHEN ══════ -->
+<div class="page" id="page-kitchen">
+  <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:4px;">
+    <div><div class="page-title">Kitchen Mode</div><div class="page-sub">Step-by-step guided baking.</div></div>
+    <select class="select" id="kitchen-recipe-select" onchange="loadKitchenRecipe()" style="width:auto;min-width:200px;margin-top:4px;"></select>
+  </div>
+  <div id="kitchen-content"></div>
+</div>
+
+<!-- ═══════════════════════════════════════════ INVENTORY ═══ -->
+<div class="page" id="page-inventory">
+  <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:4px;">
+    <div><div class="page-title">Smart Inventory</div><div class="page-sub" id="inv-sub">Tracking your ingredients.</div></div>
+    <button class="btn btn-primary" onclick="openAddIngredient()" style="margin-top:4px;">+ Add Item</button>
+  </div>
+  <div class="stats-row" id="inv-stats"></div>
+  <div class="inv-layout">
+    <div class="card"><table class="inv-table"><thead><tr><th>Ingredient</th><th>Stock</th><th>Level</th><th>Status</th><th></th></tr></thead><tbody id="inv-tbody"></tbody></table></div>
+    <div id="inv-alerts"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ MODALS ═══════ -->
+
+<!-- Add/Edit Recipe Modal -->
+<div class="modal-bg" id="modal-recipe">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="modal-recipe-title">New Recipe</div>
+      <button class="modal-close" onclick="closeModal('modal-recipe')">✕</button>
+    </div>
+    <div class="field"><label class="label">Recipe name *</label><input class="input" id="r-name" placeholder="e.g. Lemon Velvet Layer Cake"></div>
+    <div class="two-col">
+      <div class="field"><label class="label">Emoji / icon</label><input class="input" id="r-emoji" value="🎂" maxlength="2"></div>
+      <div class="field"><label class="label">Background colour</label><input type="color" id="r-color" value="#F0D49A" style="width:100%;height:40px;border-radius:8px;border:.5px solid var(--border);cursor:pointer;"></div>
+    </div>
+    <div class="three-col">
+      <div class="field"><label class="label">Size</label>
+        <select class="select" id="r-size"><option>6-inch</option><option selected>8-inch</option><option>10-inch</option><option>12-inch</option><option>Custom</option></select>
+      </div>
+      <div class="field"><label class="label">Servings</label><input class="input" type="number" id="r-servings" value="12" min="1"></div>
+      <div class="field"><label class="label">Prep time (min)</label><input class="input" type="number" id="r-time" value="90" min="1"></div>
+    </div>
+    <div class="field"><label class="label">Description</label><textarea class="input" id="r-desc" rows="2" placeholder="Short description of this recipe..."></textarea></div>
+    <div class="field"><label class="label">Tags (comma-separated)</label><input class="input" id="r-tags" placeholder="chocolate, seasonal, vegan"></div>
+    <div class="divider"></div>
+    <div class="section-label" style="margin-bottom:8px;">Ingredients</div>
+    <div style="display:grid;grid-template-columns:2fr 80px 80px 28px;gap:6px;margin-bottom:6px;">
+      <span style="font-size:10px;color:var(--muted);font-weight:500;">Name</span>
+      <span style="font-size:10px;color:var(--muted);font-weight:500;">Amount</span>
+      <span style="font-size:10px;color:var(--muted);font-weight:500;">Unit</span>
+      <span></span>
+    </div>
+    <div id="modal-ing-list"></div>
+    <button class="add-small-btn" onclick="addModalIng()">+ Add ingredient</button>
+    <div class="divider"></div>
+    <div class="section-label" style="margin-bottom:8px;">Steps</div>
+    <div id="modal-steps-list"></div>
+    <button class="add-small-btn" onclick="addModalStep()">+ Add step</button>
+    <div class="divider"></div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;">
+      <button class="btn btn-secondary" onclick="closeModal('modal-recipe')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveRecipe()">Save Recipe</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Ingredient Modal -->
+<div class="modal-bg" id="modal-ingredient">
+  <div class="modal" style="max-width:400px;">
+    <div class="modal-header">
+      <div class="modal-title">Add Inventory Item</div>
+      <button class="modal-close" onclick="closeModal('modal-ingredient')">✕</button>
+    </div>
+    <div class="field"><label class="label">Ingredient name *</label><input class="input" id="inv-name" placeholder="e.g. Plain flour"></div>
+    <div class="two-col">
+      <div class="field"><label class="label">Current stock</label><input class="input" type="number" id="inv-qty" value="1000" min="0"></div>
+      <div class="field"><label class="label">Unit</label><input class="input" id="inv-unit" placeholder="g / ml / units"></div>
+    </div>
+    <div class="two-col">
+      <div class="field"><label class="label">Minimum stock</label><input class="input" type="number" id="inv-min" value="200" min="0"></div>
+      <div class="field"><label class="label">Cost per unit ($)</label><input class="input" type="number" id="inv-cost" value="0.01" step="0.001" min="0"></div>
+    </div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:8px;">
+      <button class="btn btn-secondary" onclick="closeModal('modal-ingredient')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveIngredient()">Add Item</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Timer Modal -->
+<div class="modal-bg" id="modal-timer">
+  <div class="modal" style="max-width:360px;">
+    <div class="modal-header">
+      <div class="modal-title">Add Timer</div>
+      <button class="modal-close" onclick="closeModal('modal-timer')">✕</button>
+    </div>
+    <div class="field"><label class="label">Timer label</label><input class="input" id="timer-label" placeholder="e.g. Bake layers"></div>
+    <div class="two-col">
+      <div class="field"><label class="label">Minutes</label><input class="input" type="number" id="timer-mins" value="30" min="0"></div>
+      <div class="field"><label class="label">Seconds</label><input class="input" type="number" id="timer-secs" value="0" min="0" max="59"></div>
+    </div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:8px;">
+      <button class="btn btn-secondary" onclick="closeModal('modal-timer')">Cancel</button>
+      <button class="btn btn-primary" onclick="addTimerFromModal()">Start Timer</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════ STATE ════════════════════
+const DB = {
+  load(k,d){try{const v=localStorage.getItem('bakeos_'+k);return v?JSON.parse(v):d;}catch{return d;}},
+  save(k,v){try{localStorage.setItem('bakeos_'+k,JSON.stringify(v));}catch{}}
+};
+
+let recipes      = DB.load('recipes',[]);
+let inventory    = DB.load('inventory',[]);
+let editingId    = null;
+let activePage   = 'dashboard';
+let favFilter    = false;
+let currentRecipeId = null;
+let kitchenStep  = 0;
+let kitchenTimers = [];
+let timerIntervals = {};
+let kitchenAIHistory = [];
+
+// ═══════════════════════════════════ UTILITIES ════════════════
+const uid = ()=>Math.random().toString(36).slice(2,9);
+const fmt$ = n=>'$'+(+n).toFixed(2);
+const fmtTime = s=>{const m=Math.floor(s/60),sec=s%60;return `${String(m).padStart(2,'0')}:${String(sec).padStart(2,'0')}`;};
+const toast = (msg,dur=2500)=>{const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),dur);};
+const openModal = id=>{document.getElementById(id).classList.add('open');};
+const closeModal = id=>{document.getElementById(id).classList.remove('open');};
+
+// ═══════════════════════════════════ NAVIGATION ═══════════════
+function nav(page){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-link').forEach(l=>l.classList.remove('active'));
+  document.getElementById('page-'+page).classList.add('active');
+  document.querySelector(`.nav-link[onclick*="'${page}'"]`)?.classList.add('active');
+  activePage = page;
+  if(page==='dashboard') renderDashboard();
+  if(page==='recipes') renderRecipes();
+  if(page==='pricing') initPricing();
+  if(page==='kitchen') renderKitchenSelect();
+  if(page==='inventory') renderInventory();
+}
+
+// ═══════════════════════════════════ DASHBOARD ════════════════
+function renderDashboard(){
+  const now = new Date();
+  const hour = now.getHours();
+  
+  document.querySelector('#page-dashboard .page-title').textContent = (hour<12?'Good morning ✦':hour<18?'Good afternoon ✦':'Good evening ✦');
+  document.getElementById('dash-sub').textContent = `${recipes.length} recipe${recipes.length!==1?'s':''} in your library · ${inventory.filter(i=>i.qty<i.min).length} item${inventory.filter(i=>i.qty<i.min).length!==1?'s':' '} low on stock`;
+  const lowInv = inventory.filter(i=>i.qty<i.min).length;
+  document.getElementById('inv-quick-sub').textContent = lowInv > 0 ? `${lowInv} item${lowInv>1?'s':''} low` : 'Manage ingredients';
+  // stats
+  const totalPricedRecipes = recipes.filter(r=>r.price>0);
+  const avgPrice = totalPricedRecipes.length ? (totalPricedRecipes.reduce((a,r)=>a+r.price,0)/totalPricedRecipes.length) : 0;
+  document.getElementById('dash-stats').innerHTML = `
+    <div class="stat-card"><div class="stat-val">${recipes.length}</div><div class="stat-lbl">Recipes saved</div></div>
+    <div class="stat-card"><div class="stat-val">${recipes.filter(r=>r.fav).length}</div><div class="stat-lbl">Favourites</div></div>
+    <div class="stat-card"><div class="stat-val">${inventory.length}</div><div class="stat-lbl">Inventory items</div></div>
+    <div class="stat-card"><div class="stat-val">${avgPrice>0?fmt$(avgPrice):'—'}</div><div class="stat-lbl">Avg. recipe price</div></div>`;
+  // recent
+  const recent = [...recipes].reverse().slice(0,5);
+  const recEl = document.getElementById('dash-recent-recipes');
+  if(!recent.length){recEl.innerHTML='<div style="text-align:center;color:var(--muted);font-size:12px;padding:16px 0;">No recipes yet. Add your first one!</div>';return;}
+  recEl.innerHTML = recent.map(r=>`
+    <div class="order-row" style="cursor:pointer" onclick="viewRecipe('${r.id}')">
+      <div class="order-dot" style="background:${r.color||'var(--cg)'};"></div>
+      <div class="order-info"><div class="order-name">${r.emoji||'🎂'} ${r.name}</div><div class="order-meta">${r.size} · ${r.servings} srv</div></div>
+      ${r.price?`<div class="order-price">${fmt$(r.price)}</div>`:''}
+    </div>`).join('');
+  // AI tip
+  if(recipes.length===0){
+    document.getElementById('dash-ai-msg').textContent='Add your first recipe to unlock AI pricing insights and smart tips.';
+  } else if(recipes.length<3){
+    document.getElementById('dash-ai-msg').textContent='Great start! Add a few more recipes and the kitchen mode to start baking with guided steps.';
+  } else {
+    const unpriced = recipes.filter(r=>!r.price);
+    if(unpriced.length>0){document.getElementById('dash-ai-msg').textContent=`${unpriced.length} recipe${unpriced.length>1?'s have':' has'} no price set. Open the Pricing Calculator to make sure you're covering costs and paying yourself.`;}
+    else {document.getElementById('dash-ai-msg').textContent=`All ${recipes.length} recipes are priced. Check your inventory to make sure you're stocked for your next bake.`;}
+  }
+}
+
+// ═══════════════════════════════════ RECIPES ══════════════════
+function renderRecipes(){
+  const q = (document.getElementById('recipe-search')?.value||'').toLowerCase();
+  const activeTags = [...document.querySelectorAll('.ftag.on')].map(el=>el.dataset.tag).filter(t=>t!=='all');
+  let list = recipes.filter(r=>{
+    const matchQ = !q || r.name.toLowerCase().includes(q) || (r.tags||[]).some(t=>t.toLowerCase().includes(q));
+    const matchTag = activeTags.length===0 || activeTags.some(t=>(r.tags||[]).map(x=>x.toLowerCase()).includes(t.toLowerCase()));
+    const matchFav = !favFilter || r.fav;
+    return matchQ && matchTag && matchFav;
+  });
+  // filter tags
+  const allTags = [...new Set(recipes.flatMap(r=>r.tags||[]))].filter(Boolean);
+  document.getElementById('filter-tags').innerHTML =
+    `<span class="ftag on" data-tag="all" onclick="toggleFTag(this)">All</span>`+
+    allTags.map(t=>`<span class="ftag" data-tag="${t}" onclick="toggleFTag(this)">${t}</span>`).join('');
+  document.getElementById('recipe-count-label').textContent = `${list.length} recipe${list.length!==1?'s':''}`;
+  const grid = document.getElementById('recipes-grid');
+  if(!recipes.length){
+    grid.innerHTML=`<div class="add-recipe-card" onclick="openAddRecipe()"><div class="add-icon">+</div><div style="font-size:13px;font-weight:500;">Add your first recipe</div><div style="font-size:11px;">Manual entry, step by step</div></div>`;
+    return;
+  }
+  grid.innerHTML = list.map(r=>`
+    <div class="recipe-card" onclick="viewRecipe('${r.id}')">
+      <div class="recipe-img" style="background:${r.color||'#F5EFE4'};">${r.emoji||'🎂'}</div>
+      <div class="recipe-body">
+        <div class="recipe-name">${r.name}</div>
+        <div class="recipe-meta">${r.size||'8-inch'} · ${r.servings||12} srv · ${r.time||90}min</div>
+        <div class="recipe-footer">
+          <span>${(r.tags||[]).slice(0,1).map(t=>`<span class="tag tag-brown">${t}</span>`).join('')}</span>
+          <span class="recipe-price">${r.price?fmt$(r.price):'no price'}</span>
+        </div>
+      </div>
+    </div>`).join('')+
+    `<div class="add-recipe-card" onclick="openAddRecipe()"><div class="add-icon">+</div><div style="font-size:13px;font-weight:500;">Add recipe</div><div style="font-size:11px;">Manual entry</div></div>`;
+}
+
+function toggleFTag(el){
+  const t = el.dataset.tag;
+  if(t==='all'){document.querySelectorAll('.ftag').forEach(x=>x.classList.remove('on'));el.classList.add('on');}
+  else{document.querySelector('.ftag[data-tag="all"]')?.classList.remove('on');el.classList.toggle('on');if(!document.querySelectorAll('.ftag.on').length)document.querySelector('.ftag[data-tag="all"]').classList.add('on');}
+  renderRecipes();
+}
+function toggleFavFilter(){
+  favFilter=!favFilter;
+  document.getElementById('fav-btn').style.background = favFilter?'var(--cr)':'';
+  document.getElementById('fav-btn').style.color = favFilter?'#fff':'';
+  renderRecipes();
+}
+
+function openAddRecipe(id=null){
+  editingId = id;
+  document.getElementById('modal-recipe-title').textContent = id ? 'Edit Recipe' : 'New Recipe';
+  const r = id ? recipes.find(x=>x.id===id) : null;
+  document.getElementById('r-name').value = r?.name||'';
+  document.getElementById('r-emoji').value = r?.emoji||'🎂';
+  document.getElementById('r-color').value = r?.color||'#F0D49A';
+  document.getElementById('r-size').value = r?.size||'8-inch';
+  document.getElementById('r-servings').value = r?.servings||12;
+  document.getElementById('r-time').value = r?.time||90;
+  document.getElementById('r-desc').value = r?.desc||'';
+  document.getElementById('r-tags').value = (r?.tags||[]).join(', ');
+  // ingredients
+  const ings = r?.ingredients||[{name:'',amount:'',unit:''}];
+  document.getElementById('modal-ing-list').innerHTML='';
+  ings.forEach(ing=>addModalIng(ing));
+  // steps
+  const steps = r?.steps||[{text:''}];
+  document.getElementById('modal-steps-list').innerHTML='';
+  steps.forEach(s=>addModalStep(s));
+  openModal('modal-recipe');
+}
+
+function addModalIng(ing={}){
+  const row = document.createElement('div');
+  row.className='ing-row';
+  row.innerHTML=`<input class="ing-input" placeholder="Ingredient name" value="${ing.name||''}">
+    <input class="ing-input" placeholder="250" value="${ing.amount||''}">
+    <input class="ing-input" placeholder="g / ml" value="${ing.unit||''}">
+    <button class="remove-btn" onclick="this.parentElement.remove()">×</button>`;
+  document.getElementById('modal-ing-list').appendChild(row);
+}
+function addModalStep(step={}){
+  const list = document.getElementById('modal-steps-list');
+  const num = list.children.length+1;
+  const row = document.createElement('div');
+  row.className='step-row';
+  row.innerHTML=`<div class="step-num">${num}</div>
+    <textarea class="step-textarea" placeholder="Describe step ${num}...">${step.text||''}</textarea>
+    <button class="remove-btn" onclick="this.parentElement.remove();renumberSteps()" style="margin-top:6px">×</button>`;
+  list.appendChild(row);
+}
+function renumberSteps(){
+  document.querySelectorAll('#modal-steps-list .step-num').forEach((el,i)=>el.textContent=i+1);
+}
+function saveRecipe(){
+  const name = document.getElementById('r-name').value.trim();
+  if(!name){toast('Please enter a recipe name.');return;}
+  const ingredients = [...document.querySelectorAll('#modal-ing-list .ing-row')].map(row=>{
+    const ins=row.querySelectorAll('input');
+    return {name:ins[0].value.trim(),amount:ins[1].value.trim(),unit:ins[2].value.trim()};
+  }).filter(i=>i.name);
+  const steps = [...document.querySelectorAll('#modal-steps-list .step-textarea')].map(ta=>({text:ta.value.trim()})).filter(s=>s.text);
+  const tags = document.getElementById('r-tags').value.split(',').map(t=>t.trim()).filter(Boolean);
+  if(editingId){
+    const idx = recipes.findIndex(r=>r.id===editingId);
+    recipes[idx]={...recipes[idx],name,emoji:document.getElementById('r-emoji').value,color:document.getElementById('r-color').value,size:document.getElementById('r-size').value,servings:+document.getElementById('r-servings').value,time:+document.getElementById('r-time').value,desc:document.getElementById('r-desc').value.trim(),tags,ingredients,steps};
+  } else {
+    recipes.push({id:uid(),name,emoji:document.getElementById('r-emoji').value,color:document.getElementById('r-color').value,size:document.getElementById('r-size').value,servings:+document.getElementById('r-servings').value,time:+document.getElementById('r-time').value,desc:document.getElementById('r-desc').value.trim(),tags,ingredients,steps,fav:false,price:0,createdAt:Date.now()});
+  }
+  DB.save('recipes',recipes);
+  closeModal('modal-recipe');
+  toast(editingId?'Recipe updated!':'Recipe saved! ✓');
+  renderRecipes();
+}
+
+function viewRecipe(id){
+  currentRecipeId = id;
+  const r = recipes.find(x=>x.id===id);
+  if(!r)return;
+  const content = document.getElementById('recipe-detail-content');
+  content.innerHTML=`
+    <div class="detail-header">
+      <div class="detail-img" style="background:${r.color||'#F5EFE4'};font-size:52px;">${r.emoji||'🎂'}</div>
+      <div class="detail-info">
+        <div class="detail-title">${r.name}</div>
+        <div class="detail-tags">${(r.tags||[]).map(t=>`<span class="tag tag-brown">${t}</span>`).join('')}</div>
+        ${r.desc?`<div style="font-size:13px;color:var(--muted);margin-bottom:10px;">${r.desc}</div>`:''}
+        <div class="detail-stats">
+          <div><div class="detail-stat-val">${r.size||'8-inch'}</div><div class="detail-stat-lbl">Size</div></div>
+          <div><div class="detail-stat-val">${r.servings||12}</div><div class="detail-stat-lbl">Servings</div></div>
+          <div><div class="detail-stat-val">${r.time||90}m</div><div class="detail-stat-lbl">Prep time</div></div>
+          ${r.price?`<div><div class="detail-stat-val">${fmt$(r.price)}</div><div class="detail-stat-lbl">Price</div></div>`:''}
+        </div>
+        <div class="detail-actions">
+          <button class="btn btn-primary" onclick="startBakingMode('${r.id}')">▶ Start Baking</button>
+          <button class="btn btn-secondary" onclick="openAddRecipe('${r.id}')">Edit</button>
+          <button class="btn btn-secondary" onclick="toggleFav('${r.id}')">${r.fav?'♥ Saved':'♡ Favourite'}</button>
+          <button class="btn btn-danger btn-sm" onclick="deleteRecipe('${r.id}')">Delete</button>
+        </div>
+      </div>
+    </div>
+    <div class="detail-grid">
+      <div class="card">
+        <div class="section-label" style="margin-bottom:10px;">Ingredients (${(r.ingredients||[]).length})</div>
+        ${(r.ingredients||[]).length?r.ingredients.map(i=>`<div class="ing-list-item"><div class="ing-dot"></div><div class="ing-text">${i.name}</div><div class="ing-qty">${i.amount} ${i.unit}</div></div>`).join(''):'<div style="color:var(--muted);font-size:13px;">No ingredients added yet.</div>'}
+      </div>
+      <div class="card">
+        <div class="section-label" style="margin-bottom:10px;">Steps (${(r.steps||[]).length})</div>
+        ${(r.steps||[]).length?r.steps.map((s,i)=>`<div class="step-item"><div class="step-circle">${i+1}</div><div class="step-text">${s.text}</div></div>`).join(''):'<div style="color:var(--muted);font-size:13px;">No steps added yet.</div>'}
+      </div>
+    </div>
+    ${r.price?`<div class="pricing-box" style="margin-top:14px;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-end;">
+        <div><div style="font-size:11px;color:rgba(250,247,242,.5);margin-bottom:4px;">Recommended price</div><div class="pricing-total">${fmt$(r.price)}</div><div class="pricing-per">Per serving: ${fmt$(r.price/r.servings)}</div></div>
+        <button class="btn btn-gold btn-sm" onclick="nav('pricing')">Reprice →</button>
+      </div>
+    </div>`:`<div style="margin-top:14px;"><button class="btn btn-gold" onclick="pricingFromRecipe('${r.id}')">💰 Price this recipe</button></div>`}`;
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-recipe-detail').classList.add('active');
+}
+
+function deleteRecipe(id){
+  if(!confirm('Delete this recipe? This cannot be undone.'))return;
+  recipes = recipes.filter(r=>r.id!==id);
+  DB.save('recipes',recipes);
+  toast('Recipe deleted.');
+  nav('recipes');
+}
+function toggleFav(id){
+  const r = recipes.find(x=>x.id===id);
+  if(r){r.fav=!r.fav;DB.save('recipes',recipes);viewRecipe(id);toast(r.fav?'Added to favourites ♥':'Removed from favourites');}
+}
+function pricingFromRecipe(id){
+  const r = recipes.find(x=>x.id===id);
+  if(r){document.getElementById('pc-name').value=r.name;nav('pricing');recalc();}
+}
+
+// ═══════════════════════════════════ PRICING ══════════════════
+function initPricing(){
+  if(!document.getElementById('ing-list').children.length){
+    addIngRow({name:'',unit:'',cost:0});
+    addIngRow({name:'',unit:'',cost:0});
+  }
+  recalc();
+}
+function addIngRow(ing={}){
+  const row=document.createElement('div');
+  row.className='ing-row';
+  row.innerHTML=`<input class="ing-input" placeholder="e.g. Flour & butter" value="${ing.name||''}">
+    <input class="ing-input" placeholder="batch" value="${ing.unit||''}">
+    <input class="ing-input" type="number" placeholder="0.00" value="${ing.cost||''}" step="0.01" oninput="recalc()">
+    <button class="remove-btn" onclick="this.parentElement.remove();recalc()">×</button>`;
+  document.getElementById('ing-list').appendChild(row);
+  recalc();
+}
+function recalc(){
+  const rate=+(document.getElementById('pc-rate')?.value||0);
+  const hours=+(document.getElementById('pc-hours')?.value||0);
+  const servings=Math.max(1,+(document.getElementById('pc-servings')?.value||1));
+  const margin=+(document.getElementById('margin-slider')?.value||25);
+  const packaging=+(document.getElementById('pc-packaging')?.value||0);
+  let ingCost=0;
+  document.querySelectorAll('#ing-list .ing-row').forEach(row=>{
+    const v=+(row.querySelectorAll('input')[2]?.value||0);
+    ingCost+=v;
+  });
+  const labour=rate*hours;
+  const overhead=(ingCost+packaging+labour)*0.10;
+  const subtotal=ingCost+packaging+labour+overhead;
+  const profit=subtotal*(margin/100);
+  const total=subtotal+profit;
+  document.getElementById('bk-ing').textContent=fmt$(ingCost);
+  document.getElementById('bk-pack').textContent=fmt$(packaging);
+  document.getElementById('bk-labour').textContent=fmt$(labour);
+  document.getElementById('bk-overhead').textContent=fmt$(overhead);
+  document.getElementById('bk-margin').textContent=fmt$(profit);
+  document.getElementById('bk-total').textContent=fmt$(total);
+  document.getElementById('bk-persrv').textContent=fmt$(total/servings)+' / srv';
+  document.getElementById('margin-pct-display').textContent=margin+'%';
+  document.getElementById('bk-name').textContent=document.getElementById('pc-name').value||'—';
+  const hint = document.getElementById('pricing-ai-hint');
+  if(total>0){
+    const perSrv=(total/servings).toFixed(2);
+    if(margin<15) hint.textContent='⚠️ Your margin is below 15% — you may be underpricing. Consider increasing to at least 25%.';
+    else if(total<30) hint.textContent='💡 This price seems low for a custom cake. Make sure all ingredient costs are included.';
+    else hint.textContent=`✓ $${total.toFixed(2)} is a solid price. At $${perSrv}/serving, you're positioned professionally.`;
+  } else {
+    hint.textContent='💡 Fill in ingredients, labour, and packaging to calculate your price.';
+  }
+}
+function savePricingToRecipe(){
+  const name=document.getElementById('pc-name').value.trim();
+  if(!name){toast('Enter a cake name to save the price.');return;}
+  const rate=+(document.getElementById('pc-rate')?.value||0);
+  const hours=+(document.getElementById('pc-hours')?.value||0);
+  const servings=Math.max(1,+(document.getElementById('pc-servings')?.value||1));
+  const margin=+(document.getElementById('margin-slider')?.value||25);
+  const packaging=+(document.getElementById('pc-packaging')?.value||0);
+  let ingCost=0;
+  document.querySelectorAll('#ing-list .ing-row').forEach(row=>{ingCost+=+(row.querySelectorAll('input')[2]?.value||0);});
+  const labour=rate*hours;
+  const overhead=(ingCost+packaging+labour)*0.10;
+  const subtotal=ingCost+packaging+labour+overhead;
+  const profit=subtotal*(margin/100);
+  const total=+(subtotal+profit).toFixed(2);
+  const match=recipes.find(r=>r.name.toLowerCase()===name.toLowerCase());
+  if(match){match.price=total;DB.save('recipes',recipes);toast(`Price ${fmt$(total)} saved to "${match.name}" ✓`);}
+  else{recipes.push({id:uid(),name,emoji:'🎂',color:'#F0D49A',size:document.getElementById('pc-size').value,servings,time:0,desc:'',tags:[],ingredients:[],steps:[],fav:false,price:total,createdAt:Date.now()});DB.save('recipes',recipes);toast(`New recipe "${name}" created with price ${fmt$(total)} ✓`);}
+}
+
+// ═══════════════════════════════════ KITCHEN ══════════════════
+function renderKitchenSelect(){
+  const sel=document.getElementById('kitchen-recipe-select');
+  sel.innerHTML='<option value="">— Select a recipe —</option>'+
+    recipes.filter(r=>(r.steps||[]).length>0).map(r=>`<option value="${r.id}">${r.emoji||'🎂'} ${r.name}</option>`).join('');
+  if(currentRecipeId && recipes.find(r=>r.id===currentRecipeId && (r.steps||[]).length>0)){
+    sel.value=currentRecipeId;
+    loadKitchenRecipe();
+  } else {
+    renderKitchenEmpty();
+  }
+}
+function renderKitchenEmpty(){
+  const content=document.getElementById('kitchen-content');
+  if(!recipes.length){
+    content.innerHTML=`<div class="empty-state"><div class="empty-icon">🍳</div><div class="empty-title">No recipes yet</div><div class="empty-sub">Add a recipe with steps to use Kitchen Mode.</div><button class="btn btn-primary" onclick="nav('recipes');setTimeout(()=>openAddRecipe(),100)">Add First Recipe</button></div>`;
+  } else if(!recipes.some(r=>(r.steps||[]).length>0)){
+    content.innerHTML=`<div class="empty-state"><div class="empty-icon">📋</div><div class="empty-title">No steps added</div><div class="empty-sub">Edit your recipes to add step-by-step instructions.</div></div>`;
+  } else {
+    content.innerHTML=`<div class="empty-state"><div class="empty-icon">👆</div><div class="empty-title">Select a recipe above</div><div class="empty-sub">Choose a recipe to start guided baking mode.</div></div>`;
+  }
+}
+function startBakingMode(id){
+  currentRecipeId=id;
+  nav('kitchen');
+  setTimeout(()=>{document.getElementById('kitchen-recipe-select').value=id;loadKitchenRecipe();},100);
+}
+function loadKitchenRecipe(){
+  const id=document.getElementById('kitchen-recipe-select').value;
+  if(!id){renderKitchenEmpty();return;}
+  const r=recipes.find(x=>x.id===id);
+  if(!r||(r.steps||[]).length===0){renderKitchenEmpty();return;}
+  currentRecipeId=id;
+  kitchenStep=0;
+  Object.values(timerIntervals).forEach(clearInterval);
+  timerIntervals={};
+  kitchenTimers=[];
+  kitchenAIHistory=[];
+  renderKitchenMode(r);
+}
+function renderKitchenMode(r){
+  const steps=r.steps||[];
+  const content=document.getElementById('kitchen-content');
+  content.innerHTML=`
+    <div class="progress-bar"><div class="progress-fill" id="k-progress" style="width:${Math.round((kitchenStep/Math.max(steps.length-1,1))*100)}%"></div></div>
+    <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:14px;">
+      <div style="font-size:13px;color:var(--muted);">${r.emoji||'🎂'} ${r.name} · ${steps.length} steps</div>
+      <div style="font-size:12px;color:var(--muted);">Step <span id="k-step-cur">${kitchenStep+1}</span> of ${steps.length}</div>
+    </div>
+    <div class="bake-layout">
+      <div>
+        <div class="active-step-card" id="k-active-card">
+          <div class="step-eyebrow">Step <span id="k-step-num">${kitchenStep+1}</span> of ${steps.length}</div>
+          <div class="step-big-title" id="k-step-title">Step ${kitchenStep+1}</div>
+          <div class="step-big-body" id="k-step-body">${steps[kitchenStep]?.text||''}</div>
+          <div class="step-nav">
+            <button class="step-ctrl" onclick="kPrev()">← Previous</button>
+            <span class="step-dots" id="k-dots"></span>
+            <button class="step-ctrl primary-ctrl" onclick="kNext(${steps.length})">Next step →</button>
+          </div>
+        </div>
+        <div class="section-label" style="margin-bottom:8px;">Timers</div>
+        <div class="timer-grid" id="k-timer-grid"></div>
+        <button class="add-small-btn" onclick="openModal('modal-timer')" style="margin-top:6px;">+ Add timer</button>
+        <div class="ai-chat-panel">
+          <div class="ai-chat-label">🤖 Kitchen Assistant (Claude AI)</div>
+          <div class="ai-chat-messages" id="ai-messages"></div>
+          <div class="ai-input-row">
+            <input class="ai-chat-input" id="ai-input" placeholder="Ask anything about this step..." onkeydown="if(event.key==='Enter')sendAIMessage()">
+            <button class="ai-send-btn" onclick="sendAIMessage()">➤</button>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="section-label" style="margin-bottom:10px;">All steps</div>
+        <div id="k-checklist"></div>
+      </div>
+    </div>`;
+  updateKitchenUI(r);
+  renderTimers();
+}
+function updateKitchenUI(r){
+  const steps=r.steps||[];
+  if(!steps.length)return;
+  document.getElementById('k-progress').style.width=Math.round((kitchenStep/Math.max(steps.length-1,1))*100)+'%';
+  document.getElementById('k-step-cur').textContent=kitchenStep+1;
+  document.getElementById('k-step-num').textContent=kitchenStep+1;
+  document.getElementById('k-step-title').textContent=`Step ${kitchenStep+1}`;
+  document.getElementById('k-step-body').textContent=steps[kitchenStep]?.text||'';
+  document.getElementById('k-dots').textContent=steps.map((_,i)=>i<kitchenStep?'●':i===kitchenStep?'◎':'○').join(' ');
+  const checklist=document.getElementById('k-checklist');
+  if(checklist) checklist.innerHTML=steps.map((s,i)=>`
+    <div class="step-checklist-item" onclick="jumpKitchenStep(${i})">
+      <div class="check-dot ${i<kitchenStep?'done':i===kitchenStep?'current-step':''}">${i<kitchenStep?'✓':i+1}</div>
+      <div class="check-text ${i<kitchenStep?'done-text':i>kitchenStep?'pending-text':''}">${s.text.length>60?s.text.slice(0,60)+'…':s.text}</div>
+    </div>`).join('');
+}
+function jumpKitchenStep(i){
+  const r=recipes.find(x=>x.id===currentRecipeId);if(!r)return;
+  kitchenStep=i;updateKitchenUI(r);
+}
+function kNext(total){
+  const r=recipes.find(x=>x.id===currentRecipeId);if(!r)return;
+  if(kitchenStep<total-1){kitchenStep++;updateKitchenUI(r);}
+  else{toast('🎉 All steps complete! Enjoy your bake.');}
+}
+function kPrev(){
+  const r=recipes.find(x=>x.id===currentRecipeId);if(!r)return;
+  if(kitchenStep>0){kitchenStep--;updateKitchenUI(r);}
+}
+function renderTimers(){
+  const grid=document.getElementById('k-timer-grid');if(!grid)return;
+  grid.innerHTML=kitchenTimers.map((t,i)=>`
+    <div class="timer-card ${t.running?'active-timer':''}">
+      <div class="timer-ring ${t.running?'running':t.remaining===0?'done':''}" id="t-ring-${i}">${t.remaining===0?'✓':fmtTime(t.remaining)}</div>
+      <div class="timer-name-label">${t.label}</div>
+      <div style="display:flex;gap:4px;justify-content:center;margin-top:5px;">
+        ${t.running?`<button class="btn btn-secondary btn-sm" onclick="pauseTimer(${i})">⏸</button>`:`<button class="btn btn-secondary btn-sm" onclick="startTimer(${i})">▶</button>`}
+        <button class="btn btn-danger btn-sm" onclick="removeTimer(${i})">×</button>
+      </div>
+    </div>`).join('');
+}
+function addTimerFromModal(){
+  const label=document.getElementById('timer-label').value.trim()||'Timer';
+  const mins=+(document.getElementById('timer-mins').value||0);
+  const secs=+(document.getElementById('timer-secs').value||0);
+  const total=mins*60+secs;
+  if(!total){toast('Set a duration above 0.');return;}
+  kitchenTimers.push({label,duration:total,remaining:total,running:false});
+  closeModal('modal-timer');
+  renderTimers();
+  toast(`Timer "${label}" added.`);
+}
+function startTimer(i){
+  if(timerIntervals[i])clearInterval(timerIntervals[i]);
+  kitchenTimers[i].running=true;
+  timerIntervals[i]=setInterval(()=>{
+    if(kitchenTimers[i].remaining>0){kitchenTimers[i].remaining--;const el=document.getElementById('t-ring-'+i);if(el)el.textContent=fmtTime(kitchenTimers[i].remaining);}
+    else{clearInterval(timerIntervals[i]);kitchenTimers[i].running=false;renderTimers();toast(`⏰ Timer "${kitchenTimers[i].label}" done!`,4000);}
+  },1000);
+  renderTimers();
+}
+function pauseTimer(i){clearInterval(timerIntervals[i]);kitchenTimers[i].running=false;renderTimers();}
+function removeTimer(i){clearInterval(timerIntervals[i]);delete timerIntervals[i];kitchenTimers.splice(i,1);renderTimers();}
+
+// ═══════════════════════════════════ AI ASSISTANT ════════════
+async function sendAIMessage(){
+  const input=document.getElementById('ai-input');
+  const q=input?.value.trim();
+  if(!q)return;
+  input.value='';
+  const r=recipes.find(x=>x.id===currentRecipeId);
+  const msgs=document.getElementById('ai-messages');
+  msgs.insertAdjacentHTML('beforeend',`<div class="ai-bubble user-bubble">${q}</div>`);
+  const thinking=document.createElement('div');
+  thinking.className='ai-thinking';thinking.textContent='Thinking…';
+  msgs.appendChild(thinking);
+  msgs.scrollTop=msgs.scrollHeight;
+  kitchenAIHistory.push({role:'user',content:q});
+  const currentStep=r?.steps?.[kitchenStep]?.text||'';
+  const systemPrompt=`You are a helpful kitchen assistant inside BakeOS, a baking app. The baker is currently working on: "${r?.name||'a recipe'}". They are on step ${kitchenStep+1}: "${currentStep}". Answer baking questions concisely and practically. Keep answers under 3 sentences unless a longer explanation is genuinely needed.`;
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:400,system:systemPrompt,messages:kitchenAIHistory})
+    });
+    const data=await res.json();
+    const reply=data.content?.[0]?.text||'Sorry, I could not get a response right now.';
+    kitchenAIHistory.push({role:'assistant',content:reply});
+    thinking.remove();
+    msgs.insertAdjacentHTML('beforeend',`<div class="ai-bubble">${reply}</div>`);
+    msgs.scrollTop=msgs.scrollHeight;
+  } catch(e){
+    thinking.remove();
+    msgs.insertAdjacentHTML('beforeend',`<div class="ai-bubble">Sorry, couldn't connect to AI right now. Check your internet connection.</div>`);
+  }
+}
+
+// ═══════════════════════════════════ INVENTORY ════════════════
+function renderInventory(){
+  const low=inventory.filter(i=>i.qty<i.min);
+  const ok=inventory.filter(i=>i.qty>=i.min);
+  document.getElementById('inv-sub').textContent=`Tracking ${inventory.length} ingredient${inventory.length!==1?'s':''} · ${low.length} item${low.length!==1?'s':''} low on stock`;
+  document.getElementById('inv-stats').innerHTML=`
+    <div class="stat-card"><div class="stat-val">${inventory.length}</div><div class="stat-lbl">Tracked items</div></div>
+    <div class="stat-card"><div class="stat-val">${ok.length}</div><div class="stat-lbl">Well stocked</div></div>
+    <div class="stat-card"><div class="stat-val" style="color:${low.length>0?'var(--danger)':'var(--c)'}">${low.length}</div><div class="stat-lbl">Low / critical</div></div>
+    <div class="stat-card"><div class="stat-val">${fmt$(inventory.reduce((a,i)=>a+i.qty*i.cost,0))}</div><div class="stat-lbl">Est. stock value</div></div>`;
+  const tbody=document.getElementById('inv-tbody');
+  if(!inventory.length){tbody.innerHTML=`<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:24px 0;">No items yet. Add your first ingredient.</td></tr>`;return;}
+  tbody.innerHTML=inventory.map((item,i)=>{
+    const pct=Math.min(100,Math.round((item.qty/Math.max(item.min*2,1))*100));
+    const status=item.qty<item.min?'low':item.qty<item.min*1.5?'warn':'ok';
+    const barColor=status==='ok'?'#97C459':status==='warn'?'#EF9F27':'#E24B4A';
+    return `<tr>
+      <td><div class="inv-name">${item.name}</div><div class="inv-unit">${item.unit}</div></td>
+      <td style="font-family:'DM Mono',monospace;font-size:12px;">${item.qty.toLocaleString()} ${item.unit}</td>
+      <td><div class="bar-wrap"><div class="bar-fill" style="width:${pct}%;background:${barColor}"></div></div></td>
+      <td><span class="status-pill pill-${status}">${status==='ok'?'Good':status==='warn'?'Low':'Critical'}</span></td>
+      <td>
+        <button class="btn btn-secondary btn-sm" onclick="editInvItem(${i})" style="margin-right:4px;">Edit</button>
+        <button class="btn btn-danger btn-sm" onclick="deleteInvItem(${i})">×</button>
+      </td>
+    </tr>`;
+  }).join('');
+  // alerts
+  const alertsEl=document.getElementById('inv-alerts');
+  const alerts=[];
+  inventory.filter(i=>i.qty<i.min).forEach(i=>alerts.push({type:'danger',title:`${i.name} is critically low`,body:`Only ${i.qty} ${i.unit} remaining. Minimum is ${i.min} ${i.unit}.`}));
+  inventory.filter(i=>i.qty>=i.min && i.qty<i.min*1.5).forEach(i=>alerts.push({type:'warn',title:`${i.name} running low`,body:`${i.qty} ${i.unit} left — below 1.5× your minimum.`}));
+  if(!alerts.length){alertsEl.innerHTML=`<div class="card" style="text-align:center;color:var(--muted);padding:24px;"><div style="font-size:28px;margin-bottom:8px;">✓</div><div style="font-size:13px;font-weight:500;color:var(--cs);">All items well stocked</div></div>`;return;}
+  alertsEl.innerHTML=`<div class="section-label" style="margin-bottom:8px;">Alerts (${alerts.length})</div>`+
+    alerts.map(a=>`<div class="alert-card alert-${a.type}"><div class="alert-type ${a.type==='danger'?'d':'w'}">${a.type==='danger'?'Critical':'Low stock'}</div><div class="alert-title">${a.title}</div><div class="alert-body">${a.body}</div></div>`).join('');
+}
+function openAddIngredient(){
+  document.getElementById('inv-name').value='';
+  document.getElementById('inv-qty').value='1000';
+  document.getElementById('inv-unit').value='g';
+  document.getElementById('inv-min').value='200';
+  document.getElementById('inv-cost').value='0.01';
+  openModal('modal-ingredient');
+}
+function editInvItem(i){
+  const item=inventory[i];
+  document.getElementById('inv-name').value=item.name;
+  document.getElementById('inv-qty').value=item.qty;
+  document.getElementById('inv-unit').value=item.unit;
+  document.getElementById('inv-min').value=item.min;
+  document.getElementById('inv-cost').value=item.cost;
+  // swap save to update
+  document.querySelector('#modal-ingredient .btn-primary').onclick=()=>{
+    item.name=document.getElementById('inv-name').value.trim();
+    item.qty=+document.getElementById('inv-qty').value;
+    item.unit=document.getElementById('inv-unit').value.trim();
+    item.min=+document.getElementById('inv-min').value;
+    item.cost=+document.getElementById('inv-cost').value;
+    DB.save('inventory',inventory);closeModal('modal-ingredient');renderInventory();toast('Item updated ✓');
+    document.querySelector('#modal-ingredient .btn-primary').onclick=saveIngredient;
+  };
+  openModal('modal-ingredient');
+}
+function deleteInvItem(i){
+  if(!confirm('Remove this item from inventory?'))return;
+  inventory.splice(i,1);
+  DB.save('inventory',inventory);renderInventory();toast('Item removed.');
+}
+function saveIngredient(){
+  const name=document.getElementById('inv-name').value.trim();
+  if(!name){toast('Please enter an ingredient name.');return;}
+  inventory.push({name,qty:+document.getElementById('inv-qty').value,unit:document.getElementById('inv-unit').value.trim()||'units',min:+document.getElementById('inv-min').value,cost:+document.getElementById('inv-cost').value});
+  DB.save('inventory',inventory);closeModal('modal-ingredient');renderInventory();toast('Item added to inventory ✓');
+}
+
+// ═══════════════════════════════════ INIT ════════════════════
+renderDashboard();
+
+// ═══ SHARED UTIL ════════════════════════════════════════════════
+function fileToBase64(file){
+  return new Promise(function(res,rej){
+    var r=new FileReader();
+    r.onload=function(){res(r.result.split(',')[1]);};
+    r.onerror=rej;
+    r.readAsDataURL(file);
+  });
+}
+
+// ═══ BARCODE SCANNER ════════════════════════════════════════════
+var barcodeStream=null;
+var _barcodeReader=null;
+
+async function openBarcodeScanner(){
+  openModal('modal-barcode');
+  document.getElementById('barcode-result').classList.remove('show');
+  document.getElementById('barcode-loading').classList.remove('show');
+}
+
+async function ensureZXing(){
+  if(window.ZXing) return;
+  await new Promise(function(res,rej){
+    var s=document.createElement('script');
+    s.src='https://unpkg.com/@zxing/library@0.19.1/umd/index.min.js';
+    s.onload=res; s.onerror=rej;
+    document.head.appendChild(s);
+  });
+}
+
+async function startBarcodeCamera(){
+  var video=document.getElementById('barcode-video');
+  var btn=document.getElementById('barcode-start-btn');
+  try{
+    await ensureZXing();
+    barcodeStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'},audio:false});
+    video.srcObject=barcodeStream;
+    btn.textContent='Scanning...';
+    btn.disabled=true;
+    await video.play();
+    if(window.ZXing){
+      var codeReader=new ZXing.BrowserMultiFormatReader();
+      _barcodeReader=codeReader;
+      codeReader.decodeFromVideoElement(video).then(function(result){
+        stopBarcodeCamera();
+        lookupBarcode(result.getText());
+      }).catch(function(){});
+    }
+  } catch(e){
+    toast('Camera access denied. Upload an image instead.');
+    btn.textContent='Start Camera';
+    btn.disabled=false;
+  }
+}
+
+async function handleBarcodeFile(e){
+  var file=e.target.files[0]; if(!file) return;
+  document.getElementById('barcode-loading').classList.add('show');
+  document.getElementById('barcode-result').classList.remove('show');
+  await ensureZXing();
+  var img=new Image();
+  img.onload=async function(){
+    try{
+      var canvas=document.createElement('canvas');
+      canvas.width=img.width; canvas.height=img.height;
+      canvas.getContext('2d').drawImage(img,0,0);
+      var reader=new ZXing.BrowserMultiFormatReader();
+      var result=await reader.decodeFromCanvas(canvas);
+      lookupBarcode(result.getText());
+    } catch(err){
+      identifyProductWithAI(file);
+    }
+  };
+  img.src=URL.createObjectURL(file);
+}
+
+async function identifyProductWithAI(file){
+  var b64=await fileToBase64(file);
+  var mediaType=file.type||'image/jpeg';
+  try{
+    var res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:300,
+        messages:[{role:'user',content:[
+          {type:'image',source:{type:'base64',media_type:mediaType,data:b64}},
+          {type:'text',text:'Identify this food/baking product. Respond ONLY with valid JSON, no other text: {"name":"flour","qty":1000,"unit":"g","min":200,"cost_per_unit":0.003}'}
+        ]}]
+      })
+    });
+    var data=await res.json();
+    var raw=(data.content&&data.content[0]&&data.content[0].text)||'{}';
+    raw=raw.replace(/```json|```/g,'').trim();
+    var s=raw.indexOf('{'), en=raw.lastIndexOf('}');
+    if(s>-1&&en>-1) raw=raw.slice(s,en+1);
+    var parsed=JSON.parse(raw);
+    document.getElementById('barcode-loading').classList.remove('show');
+    prefillBarcodeResult(parsed.name||'Product',parsed.qty||500,parsed.unit||'g',parsed.min||100,parsed.cost_per_unit||0.005);
+  } catch(e){
+    document.getElementById('barcode-loading').classList.remove('show');
+    prefillBarcodeResult('Unknown product',500,'g',100,0.005);
+    toast('Could not identify — fill in details manually.');
+  }
+}
+
+async function lookupBarcode(code){
+  document.getElementById('barcode-loading').classList.add('show');
+  try{
+    var res=await fetch('https://world.openfoodfacts.org/api/v0/product/'+code+'.json');
+    var data=await res.json();
+    if(data.status===1&&data.product){
+      var p=data.product;
+      var name=p.product_name||p.generic_name||'Product '+code;
+      var rawQ=p.quantity||'500g';
+      var qty=parseInt(rawQ.replace(/[^0-9.]/g,''))||500;
+      var unit=rawQ.replace(/[0-9.\s]/g,'').trim()||'g';
+      document.getElementById('barcode-loading').classList.remove('show');
+      prefillBarcodeResult(name,qty,unit,Math.round(qty*0.2),0.005);
+      return;
+    }
+  } catch(e){}
+  try{
+    var res2=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:200,
+        messages:[{role:'user',content:'Barcode number: '+code+'. What baking ingredient or food product might this be? Respond ONLY with JSON: {"name":"self-raising flour","qty":500,"unit":"g","min":100,"cost_per_unit":0.004}'}]
+      })
+    });
+    var data2=await res2.json();
+    var raw2=(data2.content&&data2.content[0]&&data2.content[0].text)||'{}';
+    raw2=raw2.replace(/```json|```/g,'').trim();
+    var s2=raw2.indexOf('{'), e2=raw2.lastIndexOf('}');
+    if(s2>-1&&e2>-1) raw2=raw2.slice(s2,e2+1);
+    var p2=JSON.parse(raw2);
+    document.getElementById('barcode-loading').classList.remove('show');
+    prefillBarcodeResult(p2.name||'Product '+code,p2.qty||500,p2.unit||'g',p2.min||100,p2.cost_per_unit||0.005);
+  } catch(e){
+    document.getElementById('barcode-loading').classList.remove('show');
+    prefillBarcodeResult('Product '+code,500,'g',100,0.005);
+  }
+}
+
+function prefillBarcodeResult(name,qty,unit,min,cost){
+  document.getElementById('bc-name').value=name;
+  document.getElementById('bc-qty').value=qty;
+  document.getElementById('bc-unit').value=unit;
+  document.getElementById('bc-min').value=min;
+  document.getElementById('bc-cost').value=cost;
+  document.getElementById('barcode-result').classList.add('show');
+  toast('Product identified: '+name);
+}
+
+function saveBarcodeItem(){
+  var name=document.getElementById('bc-name').value.trim();
+  if(!name){toast('Enter a product name.');return;}
+  inventory.push({
+    name:name,
+    qty:+document.getElementById('bc-qty').value,
+    unit:document.getElementById('bc-unit').value.trim()||'g',
+    min:+document.getElementById('bc-min').value,
+    cost:+document.getElementById('bc-cost').value
+  });
+  DB.save('inventory',inventory);
+  closeBarcodeScanner();
+  nav('inventory');
+  toast('Added "'+name+'" to inventory ✓');
+}
+
+function stopBarcodeCamera(){
+  if(_barcodeReader){try{_barcodeReader.reset();}catch(e){} _barcodeReader=null;}
+  if(barcodeStream){barcodeStream.getTracks().forEach(function(t){t.stop();});barcodeStream=null;}
+  var btn=document.getElementById('barcode-start-btn');
+  if(btn){btn.textContent='Start Camera';btn.disabled=false;}
+}
+
+function closeBarcodeScanner(){
+  stopBarcodeCamera();
+  closeModal('modal-barcode');
+}
+
+// ═══ RECIPE PHOTO SCAN ═══════════════════════════════════════════════
+var recipeScanStream=null;
+
+function openRecipeScan(){
+  openModal('modal-recipe-scan');
+  document.getElementById('recipe-scan-result').classList.remove('show');
+  document.getElementById('recipe-scan-loading').classList.remove('show');
+  var prev=document.getElementById('recipe-scan-preview');
+  prev.classList.remove('show'); prev.src='';
+  document.getElementById('recipe-scan-video').style.display='none';
+  document.getElementById('recipe-capture-btn').style.display='none';
+}
+
+function closeRecipeScan(){
+  stopRecipeScanCamera();
+  closeModal('modal-recipe-scan');
+}
+
+async function openRecipeCamera(){
+  var video=document.getElementById('recipe-scan-video');
+  var btn=document.getElementById('recipe-capture-btn');
+  try{
+    recipeScanStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'},audio:false});
+    video.srcObject=recipeScanStream;
+    await video.play();
+    video.style.display='block';
+    btn.style.display='block';
+  } catch(e){
+    toast('Camera access denied. Use Upload Image instead.');
+  }
+}
+
+function captureRecipePhoto(){
+  var video=document.getElementById('recipe-scan-video');
+  var canvas=document.createElement('canvas');
+  canvas.width=video.videoWidth; canvas.height=video.videoHeight;
+  canvas.getContext('2d').drawImage(video,0,0);
+  var preview=document.getElementById('recipe-scan-preview');
+  preview.src=canvas.toDataURL('image/jpeg');
+  preview.classList.add('show');
+  stopRecipeScanCamera();
+  canvas.toBlob(function(blob){processRecipeImage(blob);},'image/jpeg',0.85);
+}
+
+function stopRecipeScanCamera(){
+  if(recipeScanStream){recipeScanStream.getTracks().forEach(function(t){t.stop();});recipeScanStream=null;}
+  document.getElementById('recipe-scan-video').style.display='none';
+  document.getElementById('recipe-capture-btn').style.display='none';
+}
+
+function handleRecipeScanFile(e){
+  var file=e.target.files[0]; if(!file) return;
+  var preview=document.getElementById('recipe-scan-preview');
+  preview.src=URL.createObjectURL(file);
+  preview.classList.add('show');
+  processRecipeImage(file);
+}
+
+async function processRecipeImage(file){
+  document.getElementById('recipe-scan-loading').classList.add('show');
+  document.getElementById('recipe-scan-result').classList.remove('show');
+  var b64=await fileToBase64(file);
+  var mediaType=file.type||'image/jpeg';
+  var prompt='This image shows a recipe. Extract everything visible and return ONLY valid JSON with no markdown or extra text: {"name":"...","servings":12,"size":"8-inch","tags":["chocolate"],"ingredients":[{"amount":"250","unit":"g","name":"plain flour"}],"steps":["Step one text.","Step two text."]}';
+  try{
+    var res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:1500,
+        messages:[{role:'user',content:[
+          {type:'image',source:{type:'base64',media_type:mediaType,data:b64}},
+          {type:'text',text:prompt}
+        ]}]
+      })
+    });
+    var data=await res.json();
+    var raw=(data.content&&data.content[0]&&data.content[0].text)||'{}';
+    raw=raw.replace(/```json|```/g,'').trim();
+    var s=raw.indexOf('{'), en=raw.lastIndexOf('}');
+    if(s>-1&&en>-1) raw=raw.slice(s,en+1);
+    var parsed=JSON.parse(raw);
+    document.getElementById('recipe-scan-loading').classList.remove('show');
+    prefillScannedRecipe(parsed);
+  } catch(e){
+    document.getElementById('recipe-scan-loading').classList.remove('show');
+    toast('Could not read recipe. Try a clearer photo.');
+  }
+}
+
+function prefillScannedRecipe(data){
+  document.getElementById('rs-name').value=data.name||'Scanned Recipe';
+  document.getElementById('rs-size').value=data.size||'8-inch';
+  document.getElementById('rs-servings').value=data.servings||12;
+  document.getElementById('rs-tags').value=(data.tags||[]).join(', ');
+  document.getElementById('rs-ingredients').value=(data.ingredients||[]).map(function(i){return (i.amount||'')+' '+(i.unit||'')+' '+(i.name||'');}).join('\n');
+  document.getElementById('rs-steps').value=(data.steps||[]).join('\n');
+  document.getElementById('recipe-scan-result').classList.add('show');
+  toast('Recipe extracted! Review and save.');
+}
+
+function saveScannedRecipe(){
+  var name=document.getElementById('rs-name').value.trim();
+  if(!name){toast('Recipe needs a name.');return;}
+  var ingLines=document.getElementById('rs-ingredients').value.split('\n').map(function(l){return l.trim();}).filter(Boolean);
+  var ingredients=ingLines.map(function(line){
+    var parts=line.split(' ');
+    return {amount:parts[0]||'',unit:parts[1]||'',name:parts.slice(2).join(' ')||line};
+  });
+  var steps=document.getElementById('rs-steps').value.split('\n').map(function(t){return t.trim();}).filter(Boolean).map(function(text){return {text:text};});
+  var tags=document.getElementById('rs-tags').value.split(',').map(function(t){return t.trim();}).filter(Boolean);
+  var emojis=['🎂','🍰','🧁','🍫','🍋','🍓','🫐','🥐','🍞','🧇'];
+  var emoji=emojis[Math.floor(Math.random()*emojis.length)];
+  var colors=['#F0D49A','#F4DDD9','#D4E4D5','#E8DDD0','#F5EFE4'];
+  var color=colors[Math.floor(Math.random()*colors.length)];
+  recipes.push({
+    id:uid(),name:name,emoji:emoji,color:color,
+    size:document.getElementById('rs-size').value,
+    servings:+(document.getElementById('rs-servings').value)||12,
+    time:0,desc:'Imported via photo scan.',
+    tags:tags,ingredients:ingredients,steps:steps,
+    fav:false,price:0,createdAt:Date.now()
+  });
+  DB.save('recipes',recipes);
+  closeRecipeScan();
+  nav('recipes');
+  toast('Recipe "'+name+'" saved to library!');
+}
+
+
+// ═══ WEB IMPORT ══════════════════════════════════════════════════════════
+
+var POPULAR_SITES = [
+  {name:'AllRecipes',       url:'https://www.allrecipes.com',           emoji:'🥘'},
+  {name:'BBC Good Food',    url:'https://www.bbcgoodfood.com/recipes',  emoji:'🍴'},
+  {name:'Tasty',            url:'https://tasty.co',                     emoji:'🌮'},
+  {name:'King Arthur',      url:'https://www.kingarthurbaking.com/recipes', emoji:'👑'},
+  {name:'Serious Eats',     url:'https://www.seriouseats.com',          emoji:'🔬'},
+  {name:'Food Network',     url:'https://www.foodnetwork.com/recipes',  emoji:'📺'},
+  {name:'NYT Cooking',      url:'https://cooking.nytimes.com',          emoji:'📰'},
+  {name:'Epicurious',       url:'https://www.epicurious.com/recipes-menus', emoji:'🍽️'},
+  {name:'Delicious Mag',    url:'https://www.deliciousmagazine.co.uk/recipes', emoji:'📖'},
+  {name:'Sally\'s Baking',  url:'https://sallysbakingaddiction.com',    emoji:'🧁'},
+  {name:'Nigella',          url:'https://www.nigella.com/recipes',      emoji:'✨'},
+  {name:'Jamie Oliver',     url:'https://www.jamieoliver.com/recipes',  emoji:'🫒'},
+];
+
+function openWebImport(){
+  openModal('modal-web-import');
+  document.getElementById('web-import-result').classList.remove('show');
+  document.getElementById('url-loading').classList.remove('show');
+  document.getElementById('text-loading').classList.remove('show');
+  document.getElementById('url-status').textContent = '';
+  document.getElementById('url-status').className = 'url-status';
+  document.getElementById('import-url').value = '';
+  renderSiteGrid();
+}
+
+function renderSiteGrid(){
+  var grid = document.getElementById('site-grid');
+  grid.innerHTML = POPULAR_SITES.map(function(s){
+    return '<div class="site-card" onclick="window.open(\''+s.url+'\',\'_blank\')">'
+      +'<div class="site-card-logo">'+s.emoji+'</div>'
+      +'<div class="site-card-name">'+s.name+'</div>'
+      +'<div class="site-card-url">'+s.url.replace('https://www.','').replace('https://','').split('/')[0]+'</div>'
+      +'</div>';
+  }).join('');
+}
+
+function switchImportTab(tab){
+  ['url','sites','text'].forEach(function(t){
+    document.getElementById('tab-'+t).classList.toggle('active', t===tab);
+    document.getElementById('panel-'+t).classList.toggle('active', t===tab);
+  });
+}
+
+async function importFromUrl(){
+  var url = document.getElementById('import-url').value.trim();
+  if(!url){setUrlStatus('Paste a URL above.','error');return;}
+  if(!url.startsWith('http')){setUrlStatus('URL must start with http:// or https://','error');return;}
+  setUrlStatus('Fetching page...','');
+  document.getElementById('url-loading').classList.add('show');
+  document.getElementById('web-import-result').classList.remove('show');
+
+  // Try CORS proxy to fetch the page HTML
+  var html = '';
+  var proxies = [
+    'https://api.allorigins.win/get?url=',
+    'https://corsproxy.io/?',
+  ];
+  for(var i=0;i<proxies.length;i++){
+    try{
+      var res = await fetch(proxies[i] + encodeURIComponent(url), {signal: AbortSignal.timeout(12000)});
+      if(res.ok){
+        var data = await res.json().catch(async function(){return {contents: await res.text()};});
+        html = data.contents || data.body || '';
+        if(html.length > 500) break;
+      }
+    } catch(e){}
+  }
+
+  if(!html || html.length < 200){
+    // Fallback: ask Claude to extract based on URL alone
+    document.getElementById('url-loading').classList.remove('show');
+    setUrlStatus('Could not fetch page directly. Trying AI fallback...','');
+    document.getElementById('url-loading').classList.add('show');
+    await extractRecipeFromUrlWithAI(url, '');
+    return;
+  }
+
+  // Strip to readable text — remove scripts, styles, nav etc.
+  var stripped = html
+    .replace(/<script[\s\S]*?<\/script>/gi,'')
+    .replace(/<style[\s\S]*?<\/style>/gi,'')
+    .replace(/<nav[\s\S]*?<\/nav>/gi,'')
+    .replace(/<header[\s\S]*?<\/header>/gi,'')
+    .replace(/<footer[\s\S]*?<\/footer>/gi,'')
+    .replace(/<[^>]+>/g,' ')
+    .replace(/\s{3,}/g,' ')
+    .trim()
+    .slice(0, 6000); // keep first 6k chars — enough for any recipe
+
+  await extractRecipeFromUrlWithAI(url, stripped);
+}
+
+async function extractRecipeFromUrlWithAI(url, pageText){
+  var prompt;
+  if(pageText.length > 100){
+    prompt = 'The following is text extracted from a recipe webpage (URL: '+url+'). Extract the recipe and return ONLY valid JSON with no markdown:\n{"name":"...","servings":12,"size":"8-inch","desc":"...","tags":["chocolate"],"ingredients":[{"amount":"250","unit":"g","name":"plain flour"}],"steps":["Preheat oven to 180C."]}\n\nPage text:\n'+pageText;
+  } else {
+    prompt = 'I want to import a recipe from this URL: '+url+'\nBased on the URL and site name, generate a realistic placeholder recipe in that style and return ONLY valid JSON:\n{"name":"...","servings":12,"size":"8-inch","desc":"...","tags":[],"ingredients":[{"amount":"","unit":"","name":""}],"steps":[""]}\nNote in the desc that this is a placeholder and user should verify details.';
+  }
+  try{
+    var res = await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:1500,
+        messages:[{role:'user',content:prompt}]
+      })
+    });
+    var data = await res.json();
+    var raw = (data.content&&data.content[0]&&data.content[0].text)||'{}';
+    raw = raw.replace(/```json|```/g,'').trim();
+    var s=raw.indexOf('{'), en=raw.lastIndexOf('}');
+    if(s>-1&&en>-1) raw=raw.slice(s,en+1);
+    var parsed = JSON.parse(raw);
+    parsed._sourceUrl = url;
+    document.getElementById('url-loading').classList.remove('show');
+    setUrlStatus('Recipe extracted from '+url.split('/')[2],'ok');
+    prefillWebImport(parsed);
+  } catch(e){
+    document.getElementById('url-loading').classList.remove('show');
+    setUrlStatus('Could not extract recipe. Try the Paste Text tab.','error');
+  }
+}
+
+async function importFromText(){
+  var text = document.getElementById('import-text').value.trim();
+  if(!text||text.length<20){toast('Paste some recipe text first.');return;}
+  document.getElementById('text-loading').classList.add('show');
+  document.getElementById('web-import-result').classList.remove('show');
+  var prompt = 'Structure this recipe text into JSON. Return ONLY valid JSON, no markdown:\n{"name":"...","servings":12,"size":"8-inch","desc":"...","tags":["tag"],"ingredients":[{"amount":"250","unit":"g","name":"plain flour"}],"steps":["Step text."]}\n\nRecipe text:\n'+text.slice(0,4000);
+  try{
+    var res = await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:1500,
+        messages:[{role:'user',content:prompt}]
+      })
+    });
+    var data = await res.json();
+    var raw = (data.content&&data.content[0]&&data.content[0].text)||'{}';
+    raw = raw.replace(/```json|```/g,'').trim();
+    var s=raw.indexOf('{'), en=raw.lastIndexOf('}');
+    if(s>-1&&en>-1) raw=raw.slice(s,en+1);
+    var parsed = JSON.parse(raw);
+    document.getElementById('text-loading').classList.remove('show');
+    prefillWebImport(parsed);
+    toast('Recipe structured! Review and save.');
+  } catch(e){
+    document.getElementById('text-loading').classList.remove('show');
+    toast('Could not parse text. Try rephrasing.');
+  }
+}
+
+function setUrlStatus(msg, type){
+  var el = document.getElementById('url-status');
+  el.textContent = msg;
+  el.className = 'url-status' + (type?' '+type:'');
+}
+
+function prefillWebImport(data){
+  document.getElementById('wi-name').value = data.name||'Imported Recipe';
+  document.getElementById('wi-size').value = data.size||'8-inch';
+  document.getElementById('wi-servings').value = data.servings||12;
+  document.getElementById('wi-tags').value = (data.tags||[]).join(', ');
+  document.getElementById('wi-desc').value = data.desc||'';
+  document.getElementById('wi-ingredients').value = (data.ingredients||[]).map(function(i){
+    return ((i.amount||'')+' '+(i.unit||'')+' '+(i.name||'')).trim();
+  }).join('\n');
+  document.getElementById('wi-steps').value = (data.steps||[]).join('\n');
+  document.getElementById('web-import-result').classList.add('show');
+  // store source url for attribution
+  document.getElementById('wi-name').dataset.sourceUrl = data._sourceUrl||'';
+}
+
+function saveWebImportRecipe(){
+  var name = document.getElementById('wi-name').value.trim();
+  if(!name){toast('Recipe needs a name.');return;}
+  var ingLines = document.getElementById('wi-ingredients').value.split('\n').map(function(l){return l.trim();}).filter(Boolean);
+  var ingredients = ingLines.map(function(line){
+    var parts = line.split(' ');
+    return {amount:parts[0]||'', unit:parts[1]||'', name:parts.slice(2).join(' ')||line};
+  });
+  var steps = document.getElementById('wi-steps').value.split('\n').map(function(t){return t.trim();}).filter(Boolean).map(function(text){return {text:text};});
+  var tags = document.getElementById('wi-tags').value.split(',').map(function(t){return t.trim();}).filter(Boolean);
+  var sourceUrl = document.getElementById('wi-name').dataset.sourceUrl||'';
+  var emojis = ['🎂','🍰','🧁','🍫','🍋','🍓','🫐','🥐','🍞','🧇','🎉','🌸'];
+  var emoji = emojis[Math.floor(Math.random()*emojis.length)];
+  var colors = ['#F0D49A','#F4DDD9','#D4E4D5','#E8DDD0','#F5EFE4','#EEF2FF'];
+  var color = colors[Math.floor(Math.random()*colors.length)];
+  recipes.push({
+    id:uid(), name:name, emoji:emoji, color:color,
+    size:document.getElementById('wi-size').value,
+    servings:+(document.getElementById('wi-servings').value)||12,
+    time:0,
+    desc:document.getElementById('wi-desc').value.trim()||(sourceUrl?'Imported from '+sourceUrl:'Web import'),
+    tags:tags, ingredients:ingredients, steps:steps,
+    fav:false, price:0, createdAt:Date.now(),
+    sourceUrl:sourceUrl
+  });
+  DB.save('recipes',recipes);
+  closeModal('modal-web-import');
+  nav('recipes');
+  toast('Recipe "'+name+'" saved to library!');
+}
+
+
+// ═══ LOCAL PRICING ENGINE ══════════════════════════════════════════════
+
+var localPrices = DB.load('localPrices', []);
+var userLocation = DB.load('userLocation', null);
+var locationDebounceTimer = null;
+
+// Common baking ingredients to always price
+var CORE_INGREDIENTS = [
+  {name:'Plain flour',       unit:'1 kg'},
+  {name:'Self-raising flour',unit:'1 kg'},
+  {name:'Caster sugar',      unit:'1 kg'},
+  {name:'Icing sugar',       unit:'500 g'},
+  {name:'Butter (unsalted)', unit:'250 g'},
+  {name:'Free-range eggs',   unit:'6 pack'},
+  {name:'Whole milk',        unit:'1 litre'},
+  {name:'Double cream',      unit:'300 ml'},
+  {name:'Cream cheese',      unit:'200 g'},
+  {name:'Baking powder',     unit:'100 g'},
+  {name:'Bicarbonate of soda',unit:'200 g'},
+  {name:'Vanilla extract',   unit:'100 ml'},
+  {name:'Cocoa powder',      unit:'250 g'},
+  {name:'Dark chocolate',    unit:'200 g'},
+  {name:'Vegetable oil',     unit:'1 litre'},
+  {name:'Lemon (fresh)',     unit:'each'},
+  {name:'Food colouring',    unit:'set'},
+  {name:'Cake box',          unit:'each'},
+  {name:'Parchment paper',   unit:'roll'},
+  {name:'Ribbon/decoration', unit:'set'},
+];
+
+function initLocalPricing(){
+  updateLocationBar();
+  renderPriceDB();
+}
+
+function updateLocationBar(){
+  var display = document.getElementById('location-display');
+  var actions = document.getElementById('location-bar-actions');
+  if(!display) return;
+  if(userLocation){
+    display.textContent = userLocation.city + ', ' + userLocation.country + ' (' + (userLocation.currency||'USD') + ')';
+    if(actions) actions.innerHTML = '<button class="location-btn" onclick="openModal(\'modal-location\')">&#x270E; Change</button>';
+  } else {
+    display.textContent = 'No location set — prices may be inaccurate';
+    if(actions) actions.innerHTML = '<button class="location-btn" onclick="detectLocation()">&#x1F4CD; Detect Location</button><button class="location-btn" onclick="openModal(\'modal-location\')" style="margin-left:6px;">Set Manually</button>';
+  }
+}
+
+async function detectLocation(){
+  var bar = document.getElementById('location-bar-actions');
+  if(bar) bar.innerHTML = '<span class="location-loading">Detecting location...</span>';
+  try{
+    // Try browser geolocation then reverse geocode via free API
+    var pos = await new Promise(function(res,rej){
+      if(!navigator.geolocation){rej(new Error('no geo'));return;}
+      navigator.geolocation.getCurrentPosition(res,rej,{timeout:8000});
+    });
+    var lat = pos.coords.latitude, lon = pos.coords.longitude;
+    var geoRes = await fetch('https://api.bigdatacloud.net/data/reverse-geocode-client?latitude='+lat+'&longitude='+lon+'&localityLanguage=en');
+    var geoData = await geoRes.json();
+    var city = geoData.city || geoData.locality || geoData.principalSubdivision || 'Unknown city';
+    var country = geoData.countryName || 'Unknown country';
+    var countryCode = geoData.countryCode || 'US';
+    var currency = getCurrencyForCountry(countryCode);
+    userLocation = {city:city, country:country, countryCode:countryCode, currency:currency, lat:lat, lon:lon};
+    DB.save('userLocation', userLocation);
+    updateLocationBar();
+    document.getElementById('currency-code').value = currency;
+    document.getElementById('currency-symbol').textContent = getCurrencySymbol(currency);
+    saveCurrencyPref();
+    toast('Location set: '+city+', '+country);
+    await fetchAIPricesForLocation();
+  } catch(e){
+    openModal('modal-location');
+  }
+}
+
+async function saveLocationAndFetchPrices(){
+  var city = document.getElementById('loc-city').value.trim();
+  var country = document.getElementById('loc-country').value.trim();
+  var currency = document.getElementById('loc-currency').value.trim().toUpperCase() || 'USD';
+  if(!city || !country){toast('Enter city and country.');return;}
+  userLocation = {city:city, country:country, currency:currency};
+  DB.save('userLocation', userLocation);
+  updateLocationBar();
+  var currEl = document.getElementById('currency-code');
+  if(currEl){currEl.value = currency;}
+  var symEl = document.getElementById('currency-symbol');
+  if(symEl){symEl.textContent = getCurrencySymbol(currency);}
+  saveCurrencyPref();
+  closeModal('modal-location');
+  toast('Location saved: '+city+', '+country);
+  await fetchAIPricesForLocation();
+}
+
+async function fetchAIPricesForLocation(){
+  if(!userLocation) return;
+  var listEl = document.getElementById('price-db-list');
+  if(listEl) listEl.innerHTML = '<div style="text-align:center;color:var(--muted);font-size:12px;padding:20px 0;">&#x1F916; Fetching local prices from AI...</div>';
+  var currency = userLocation.currency || 'USD';
+  var symbol = getCurrencySymbol(currency);
+  var ingredientList = CORE_INGREDIENTS.map(function(i){return i.name+' ('+i.unit+')';}).join(', ');
+  var prompt = 'Give me typical supermarket retail prices in '+userLocation.city+', '+userLocation.country+' for these baking ingredients: '+ingredientList+'. Use '+currency+' ('+symbol+'). Return ONLY valid JSON array, no markdown:\n[{"name":"Plain flour","unit":"1 kg","price":1.20,"per_gram":0.0012},{"name":"Butter (unsalted)","unit":"250 g","price":1.80,"per_gram":0.0072}]\nInclude all ingredients listed. If unsure, give a realistic estimate for that country. per_gram should be price divided by weight in grams (or ml). For non-weight items use per_gram:0.';
+  try{
+    var res = await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:1200,
+        messages:[{role:'user',content:prompt}]
+      })
+    });
+    var data = await res.json();
+    var raw = (data.content&&data.content[0]&&data.content[0].text)||'[]';
+    raw = raw.replace(/```json|```/g,'').trim();
+    var s=raw.indexOf('['), en=raw.lastIndexOf(']');
+    if(s>-1&&en>-1) raw=raw.slice(s,en+1);
+    var prices = JSON.parse(raw);
+    // Merge with existing manual overrides
+    prices.forEach(function(p){
+      var existing = localPrices.find(function(x){return x.name.toLowerCase()===p.name.toLowerCase();});
+      if(existing){
+        existing.aiPrice = p.price;
+        existing.per_gram = p.per_gram;
+        existing.unit = p.unit;
+        // Only update price if not manually overridden
+        if(!existing.manual) existing.price = p.price;
+      } else {
+        localPrices.push({name:p.name,unit:p.unit,price:p.price,aiPrice:p.price,per_gram:p.per_gram||0,manual:false,currency:currency});
+      }
+    });
+    DB.save('localPrices', localPrices);
+    renderPriceDB();
+    toast('Local prices loaded for '+userLocation.city+' ✓');
+  } catch(e){
+    if(listEl) listEl.innerHTML = '<div style="text-align:center;color:var(--danger);font-size:12px;padding:16px 0;">Could not fetch prices. Check connection and try again.</div>';
+    toast('Could not fetch local prices.');
+  }
+}
+
+async function refreshLocalPrices(){
+  if(!userLocation){openModal('modal-location');return;}
+  toast('Refreshing prices...');
+  await fetchAIPricesForLocation();
+}
+
+function renderPriceDB(){
+  var listEl = document.getElementById('price-db-list');
+  if(!listEl) return;
+  if(!localPrices.length){
+    listEl.innerHTML = '<div style="text-align:center;color:var(--muted);font-size:12px;padding:16px 0;">Set your location above to load local prices.</div>';
+    return;
+  }
+  var currency = (userLocation&&userLocation.currency)||DB.load('currency','USD');
+  var sym = getCurrencySymbol(currency);
+  listEl.innerHTML = localPrices.map(function(p,i){
+    return '<div class="price-db-row">'
+      +'<div class="price-db-name">'+p.name+'<span class="ing-cost-pill" onclick="applyPriceToCalc('+i+')" title="Apply to calculator">+</span></div>'
+      +'<div class="price-db-unit">'+p.unit+'</div>'
+      +'<input class="price-db-input" type="number" value="'+p.price.toFixed(2)+'" step="0.01" min="0" onchange="overridePriceItem('+i+',this.value)" title="Edit price">'
+      +'<span class="price-source '+(p.manual?'manual':'ai')+'">'+(p.manual?'manual':'AI')+'</span>'
+      +'</div>';
+  }).join('');
+}
+
+function overridePriceItem(i, val){
+  localPrices[i].price = +val;
+  localPrices[i].manual = true;
+  DB.save('localPrices', localPrices);
+  // re-render just the source badge
+  var rows = document.querySelectorAll('#price-db-list .price-db-row');
+  if(rows[i]){
+    var badge = rows[i].querySelector('.price-source');
+    if(badge){badge.textContent='manual';badge.className='price-source manual';}
+  }
+  toast('Price saved ✓');
+}
+
+function applyPriceToCalc(i){
+  var p = localPrices[i];
+  if(!p) return;
+  // Find first empty ingredient row in calculator or add a new one
+  var rows = document.querySelectorAll('#ing-list .ing-row');
+  var applied = false;
+  rows.forEach(function(row){
+    if(!applied){
+      var nameInput = row.querySelectorAll('input')[0];
+      var costInput = row.querySelectorAll('input')[2];
+      if(nameInput && (!nameInput.value.trim())){
+        nameInput.value = p.name;
+        row.querySelectorAll('input')[1].value = p.unit;
+        costInput.value = p.price.toFixed(2);
+        applied = true;
+        recalc();
+      }
+    }
+  });
+  if(!applied){
+    addIngRow({name:p.name, unit:p.unit, cost:p.price.toFixed(2)});
+    recalc();
+  }
+  toast('Added '+p.name+' ('+getCurrencySymbol((userLocation&&userLocation.currency)||'USD')+p.price.toFixed(2)+') to calculator');
+}
+
+function openAddPriceItem(){
+  document.getElementById('pi-name').value='';
+  document.getElementById('pi-price').value='1.50';
+  document.getElementById('pi-unit').value='1 kg';
+  openModal('modal-price-item');
+}
+
+function savePriceItem(){
+  var name = document.getElementById('pi-name').value.trim();
+  if(!name){toast('Enter an ingredient name.');return;}
+  var currency = (userLocation&&userLocation.currency)||DB.load('currency','USD');
+  var existing = localPrices.findIndex(function(x){return x.name.toLowerCase()===name.toLowerCase();});
+  if(existing>-1){
+    localPrices[existing].price = +document.getElementById('pi-price').value;
+    localPrices[existing].unit = document.getElementById('pi-unit').value.trim();
+    localPrices[existing].manual = true;
+  } else {
+    localPrices.push({name:name,unit:document.getElementById('pi-unit').value.trim(),price:+document.getElementById('pi-price').value,aiPrice:null,per_gram:0,manual:true,currency:currency});
+  }
+  DB.save('localPrices',localPrices);
+  closeModal('modal-price-item');
+  renderPriceDB();
+  toast('Price saved for "'+name+'" ✓');
+}
+
+function locationSearchDebounce(){
+  clearTimeout(locationDebounceTimer);
+  locationDebounceTimer = setTimeout(function(){
+    var city = document.getElementById('loc-city').value.trim();
+    if(city.length > 2){
+      // Auto-suggest currency based on common cities
+      var suggestions = {
+        'london':'GBP','manchester':'GBP','birmingham':'GBP','glasgow':'GBP',
+        'new york':'USD','los angeles':'USD','chicago':'USD','houston':'USD',
+        'lagos':'NGN','abuja':'NGN','kano':'NGN',
+        'paris':'EUR','berlin':'EUR','rome':'EUR','milan':'EUR','madrid':'EUR',
+        'toronto':'CAD','vancouver':'CAD',
+        'sydney':'AUD','melbourne':'AUD',
+        'nairobi':'KES','accra':'GHS','cairo':'EGP',
+        'dubai':'AED','riyadh':'SAR',
+        'delhi':'INR','mumbai':'INR','bangalore':'INR',
+        'beijing':'CNY','shanghai':'CNY','tokyo':'JPY',
+        'johannesburg':'ZAR','cape town':'ZAR',
+      };
+      var key = city.toLowerCase();
+      var found = null;
+      Object.keys(suggestions).forEach(function(k){if(key.includes(k))found=suggestions[k];});
+      if(found && document.getElementById('loc-currency')){
+        document.getElementById('loc-currency').value = found;
+      }
+    }
+  }, 400);
+}
+
+function saveCurrencyPref(){
+  var code = document.getElementById('currency-code');
+  if(!code) return;
+  var val = code.value.trim().toUpperCase();
+  DB.save('currency', val);
+  var sym = document.getElementById('currency-symbol');
+  if(sym) sym.textContent = getCurrencySymbol(val);
+  if(userLocation){userLocation.currency=val;DB.save('userLocation',userLocation);}
+}
+
+function getCurrencySymbol(code){
+  var map = {
+    'USD':'$','GBP':'£','EUR':'€','CAD':'C$','AUD':'A$',
+    'NGN':'₦','KES':'KSh','GHS':'₵','ZAR':'R','EGP':'E£',
+    'INR':'₹','CNY':'¥','JPY':'¥','AED':'د.إ','SAR':'﷼',
+    'BRL':'R$','MXN':'$','CHF':'Fr','SEK':'kr','NOK':'kr',
+    'DKK':'kr','PLN':'zł','CZK':'Kč','HUF':'Ft','TRY':'₺',
+  };
+  return map[code] || code;
+}
+
+function getCurrencyForCountry(code){
+  var map = {
+    'GB':'GBP','US':'USD','CA':'CAD','AU':'AUD','NZ':'NZD',
+    'NG':'NGN','GH':'GHS','KE':'KES','ZA':'ZAR','EG':'EGP',
+    'IN':'INR','CN':'CNY','JP':'JPY','AE':'AED','SA':'SAR',
+    'FR':'EUR','DE':'EUR','IT':'EUR','ES':'EUR','NL':'EUR',
+    'BE':'EUR','AT':'EUR','PT':'EUR','IE':'EUR','GR':'EUR',
+    'BR':'BRL','MX':'MXN','CH':'CHF','SE':'SEK','NO':'NOK',
+    'DK':'DKK','PL':'PLN','TR':'TRY',
+  };
+  return map[code] || 'USD';
+}
+
+// Patch initPricing to also load local pricing
+var _origInitPricing = initPricing;
+initPricing = function(){
+  _origInitPricing();
+  // restore currency
+  var savedCurrency = DB.load('currency','USD');
+  var codeEl = document.getElementById('currency-code');
+  if(codeEl) codeEl.value = savedCurrency;
+  var symEl = document.getElementById('currency-symbol');
+  if(symEl) symEl.textContent = getCurrencySymbol(savedCurrency);
+  initLocalPricing();
+};
+
+
+// ═══ PWA ENGINE ══════════════════════════════════════════════════════════
+
+// Inline manifest (injected as blob URL so no server needed)
+var MANIFEST = {
+  name: 'BakeOS',
+  short_name: 'BakeOS',
+  description: 'The intelligent baking ecosystem',
+  start_url: '.',
+  display: 'standalone',
+  orientation: 'portrait-primary',
+  background_color: '#FAF7F2',
+  theme_color: '#3D2B1F',
+  categories: ['food', 'productivity', 'lifestyle'],
+  icons: [
+    {src: makePWAIcon(192, '#3D2B1F', '#C9922A'), sizes: '192x192', type: 'image/png', purpose: 'any maskable'},
+    {src: makePWAIcon(512, '#3D2B1F', '#C9922A'), sizes: '512x512', type: 'image/png', purpose: 'any maskable'},
+  ],
+  shortcuts: [
+    {name:'Recipes', short_name:'Recipes', url:'.?page=recipes', description:'View recipe library'},
+    {name:'Pricing', short_name:'Pricing', url:'.?page=pricing', description:'Calculate cake prices'},
+    {name:'Kitchen', short_name:'Kitchen', url:'.?page=kitchen', description:'Start baking mode'},
+  ]
+};
+
+function makePWAIcon(size, bg, accent){
+  var canvas = document.createElement('canvas');
+  canvas.width = size; canvas.height = size;
+  var ctx = canvas.getContext('2d');
+  // Background
+  ctx.fillStyle = bg;
+  ctx.beginPath();
+  var r = size * 0.22;
+  ctx.moveTo(r,0); ctx.lineTo(size-r,0);
+  ctx.quadraticCurveTo(size,0,size,r);
+  ctx.lineTo(size,size-r); ctx.quadraticCurveTo(size,size,size-r,size);
+  ctx.lineTo(r,size); ctx.quadraticCurveTo(0,size,0,size-r);
+  ctx.lineTo(0,r); ctx.quadraticCurveTo(0,0,r,0);
+  ctx.closePath(); ctx.fill();
+  // Letter B
+  ctx.fillStyle = '#FAF7F2';
+  ctx.font = 'bold '+Math.round(size*0.52)+'px serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('B', size*0.46, size*0.5);
+  // Gold dot
+  ctx.fillStyle = accent;
+  ctx.beginPath();
+  ctx.arc(size*0.72, size*0.35, size*0.07, 0, Math.PI*2);
+  ctx.fill();
+  return canvas.toDataURL('image/png');
+}
+
+// Inject manifest as blob
+(function(){
+  try{
+    var icons = MANIFEST.icons.map(function(ic){ return Object.assign({},ic,{src:ic.src}); });
+    var blob = new Blob([JSON.stringify(Object.assign({},MANIFEST,{icons:icons}))], {type:'application/json'});
+    var url = URL.createObjectURL(blob);
+    document.getElementById('pwa-manifest').href = url;
+  } catch(e){}
+})();
+
+// Service Worker registration (inline via blob)
+var SW_CODE = `
+const CACHE = 'bakeos-v1';
+const ASSETS = ['/'];
+self.addEventListener('install', e => { self.skipWaiting(); });
+self.addEventListener('activate', e => { e.waitUntil(self.clients.claim()); });
+self.addEventListener('fetch', e => {
+  if(e.request.method !== 'GET') return;
+  if(e.request.url.includes('api.anthropic.com')) return;
+  if(e.request.url.includes('fonts.googleapis.com') || e.request.url.includes('fonts.gstatic.com') || e.request.url.includes('unpkg.com')){
+    e.respondWith(caches.open(CACHE).then(c => c.match(e.request).then(r => r || fetch(e.request).then(res => { c.put(e.request, res.clone()); return res; }))));
+    return;
+  }
+  e.respondWith(fetch(e.request).catch(() => caches.match(e.request)));
+});
+`;
+
+if('serviceWorker' in navigator){
+  try{
+    var swBlob = new Blob([SW_CODE], {type:'application/javascript'});
+    var swUrl = URL.createObjectURL(swBlob);
+    navigator.serviceWorker.register(swUrl, {scope:'./'}).then(function(reg){
+      console.log('BakeOS SW registered');
+    }).catch(function(e){ console.log('SW reg failed (normal for file://):', e.message); });
+  } catch(e){}
+}
+
+// Install prompt
+var _installPrompt = null;
+window.addEventListener('beforeinstallprompt', function(e){
+  e.preventDefault();
+  _installPrompt = e;
+  // Show banner after 3 seconds if not dismissed before
+  if(!DB.load('installDismissed', false)){
+    setTimeout(function(){
+      document.getElementById('install-banner').classList.add('show');
+    }, 3000);
+  }
+});
+
+window.addEventListener('appinstalled', function(){
+  document.getElementById('install-banner').classList.remove('show');
+  toast('BakeOS installed! Find it on your home screen.');
+  DB.save('installDismissed', true);
+});
+
+function triggerInstall(){
+  if(_installPrompt){
+    _installPrompt.prompt();
+    _installPrompt.userChoice.then(function(result){
+      if(result.outcome === 'accepted'){
+        toast('Installing BakeOS...');
+      }
+      _installPrompt = null;
+      document.getElementById('install-banner').classList.remove('show');
+    });
+  } else {
+    // Fallback instructions
+    showInstallInstructions();
+  }
+}
+
+function dismissInstallBanner(){
+  document.getElementById('install-banner').classList.remove('show');
+  DB.save('installDismissed', true);
+}
+
+function showInstallInstructions(){
+  // Create a quick instruction toast/overlay
+  var div = document.createElement('div');
+  div.style.cssText = 'position:fixed;inset:0;background:rgba(28,20,16,.7);z-index:600;display:flex;align-items:flex-end;justify-content:center;';
+  div.innerHTML = '<div style="background:#fff;border-radius:16px 16px 0 0;padding:24px 20px;width:100%;max-width:500px;font-family:DM Sans,sans-serif;">'
+    +'<div style="font-family:Playfair Display,serif;font-size:18px;color:#3D2B1F;margin-bottom:14px;">Install BakeOS on Android</div>'
+    +'<div style="font-size:13px;color:#8A7A6F;line-height:2;">'
+    +'1. Tap the <strong style="color:#1C1410;">three dots menu</strong> (&#8942;) in Chrome<br>'
+    +'2. Tap <strong style="color:#1C1410;">"Add to Home screen"</strong><br>'
+    +'3. Tap <strong style="color:#1C1410;">"Add"</strong> to confirm<br>'
+    +'4. BakeOS will appear on your home screen like a native app'
+    +'</div>'
+    +'<div style="margin-top:16px;display:flex;gap:10px;">'
+    +'<button onclick="this.closest(\'div[style*=fixed]\').remove()" style="flex:1;background:#3D2B1F;color:#FAF7F2;border:none;border-radius:8px;padding:11px;font-size:13px;font-weight:500;cursor:pointer;font-family:DM Sans,sans-serif;">Got it</button>'
+    +'</div>'
+    +'</div>';
+  document.body.appendChild(div);
+}
+
+// Handle deep-link shortcuts (?page=xxx)
+(function(){
+  var params = new URLSearchParams(window.location.search);
+  var page = params.get('page');
+  if(page && ['recipes','pricing','kitchen','inventory'].includes(page)){
+    setTimeout(function(){ nav(page); }, 100);
+  }
+})();
+
+
+// ═══ SETTINGS & THEMING ENGINE ════════════════════════════════════════════
+
+var THEMES = [
+  {id:'default', label:'Warm Classic', bg:'#FAF7F2', bar:'#3D2B1F', accent:'#C9922A'},
+  {id:'dark',    label:'Dark Espresso', bg:'#1A1410', bar:'#C9922A', accent:'#E5A93C'},
+  {id:'forest',  label:'Forest Green', bg:'#F2F5F0', bar:'#3D6B35', accent:'#5A9B50'},
+  {id:'rose',    label:'Dusty Rose',   bg:'#FEF5F5', bar:'#A03535', accent:'#C84848'},
+  {id:'midnight',label:'Midnight',     bg:'#0F0F18', bar:'#6B5FD8', accent:'#8B7FF0'},
+  {id:'slate',   label:'Slate Blue',   bg:'#F4F6F8', bar:'#2C4A6E', accent:'#3D6EA0'},
+];
+
+var ACCENTS = [
+  {label:'Gold',    hex:'#C9922A'},
+  {label:'Espresso',hex:'#5C3A1E'},
+  {label:'Rose',    hex:'#C2736A'},
+  {label:'Sage',    hex:'#6B8C6E'},
+  {label:'Indigo',  hex:'#534AB7'},
+  {label:'Ruby',    hex:'#A32D2D'},
+  {label:'Teal',    hex:'#0F6E56'},
+  {label:'Slate',   hex:'#2C4A6E'},
+  {label:'Plum',    hex:'#72243E'},
+  {label:'Amber',   hex:'#BA7517'},
+  {label:'Coral',   hex:'#D85A30'},
+  {label:'Midnight',hex:'#1A237E'},
+];
+
+var DENSITIES = [
+  {id:'compact',     label:'Compact',     sub:'More content, less space', icon:'▤'},
+  {id:'comfortable', label:'Comfortable', sub:'Balanced — default',       icon:'▥'},
+  {id:'spacious',    label:'Spacious',    sub:'Relaxed, easy to read',    icon:'▦'},
+];
+
+var uiPrefs = DB.load('uiPrefs', {
+  theme:'default', accent:'#C9922A', density:'comfortable',
+  showPrices:true, showEmoji:true, showAITips:true, animations:true
+});
+var profileData = DB.load('profileData', {name:'', tagline:'', location:'', avatar:'B'});
+
+// Apply saved prefs on load
+(function applyPrefsOnLoad(){
+  applyTheme(uiPrefs.theme, false);
+  applyAccent(uiPrefs.accent, false);
+  applyDensity(uiPrefs.density, false);
+  if(!uiPrefs.animations) document.querySelectorAll('.page').forEach(function(p){p.style.animation='none';});
+})();
+
+function nav(page){
+  document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});
+  document.querySelectorAll('.nav-link').forEach(function(l){l.classList.remove('active');});
+  document.getElementById('page-'+page).classList.add('active');
+  var btn = document.querySelector('.nav-link[onclick*="\''+page+'\'"]');
+  if(btn) btn.classList.add('active');
+  activePage = page;
+  if(page==='dashboard') renderDashboard();
+  if(page==='recipes') renderRecipes();
+  if(page==='pricing') initPricing();
+  if(page==='kitchen') renderKitchenSelect();
+  if(page==='inventory') renderInventory();
+  if(page==='settings') initSettings();
+}
+
+function initSettings(){
+  renderThemeGrid();
+  renderAccentGrid();
+  renderDensityRow();
+  loadUIToggles();
+  loadProfileFields();
+  calcStorage();
+}
+
+function switchSettingsTab(tab){
+  document.querySelectorAll('.settings-section').forEach(function(s){s.classList.remove('active');});
+  document.querySelectorAll('.settings-nav-item').forEach(function(b){b.classList.remove('active');});
+  document.getElementById('settings-'+tab).classList.add('active');
+  document.querySelector('.settings-nav-item[onclick*="\''+tab+'\'"]').classList.add('active');
+}
+
+// ── THEMES ──────────────────────────────────────────────────────────────
+function renderThemeGrid(){
+  var grid = document.getElementById('theme-grid');
+  if(!grid) return;
+  grid.innerHTML = THEMES.map(function(t){
+    var active = uiPrefs.theme===t.id ? 'active' : '';
+    return '<div class="theme-swatch '+active+'" onclick="applyTheme(\''+t.id+'\',true)" title="'+t.label+'">'
+      +'<div class="swatch-preview" style="background:'+t.bg+';"><span style="font-family:Playfair Display,serif;font-size:13px;font-weight:700;color:'+t.bar+';">BakeOS</span></div>'
+      +'<div class="swatch-bar" style="background:'+t.bar+';"></div>'
+      +'<div class="swatch-label" style="background:'+t.bg+';color:'+t.bar+';">'+t.label+'</div>'
+      +'</div>';
+  }).join('');
+}
+
+function applyTheme(id, save){
+  // Remove all theme classes
+  THEMES.forEach(function(t){ document.body.classList.remove('theme-'+t.id); });
+  if(id !== 'default') document.body.classList.add('theme-'+id);
+  uiPrefs.theme = id;
+  if(save){
+    DB.save('uiPrefs', uiPrefs);
+    renderThemeGrid();
+    toast('Theme applied ✓');
+  }
+}
+
+// ── ACCENTS ──────────────────────────────────────────────────────────────
+function renderAccentGrid(){
+  var grid = document.getElementById('accent-grid');
+  if(!grid) return;
+  grid.innerHTML = ACCENTS.map(function(a){
+    var active = uiPrefs.accent===a.hex ? 'active' : '';
+    return '<div class="accent-dot '+active+'" style="background:'+a.hex+';" onclick="applyAccent(\''+a.hex+'\',true)" title="'+a.label+'">'
+      +'<span class="accent-check">&#x2713;</span></div>';
+  }).join('');
+  var bar = document.getElementById('accent-preview-bar');
+  if(bar) bar.style.background = uiPrefs.accent;
+  var picker = document.getElementById('custom-accent-picker');
+  if(picker) picker.value = uiPrefs.accent;
+  var hex = document.getElementById('custom-accent-hex');
+  if(hex) hex.textContent = uiPrefs.accent;
+}
+
+function applyAccent(hex, save){
+  // Inject CSS variable override
+  var style = document.getElementById('accent-override-style');
+  if(!style){ style=document.createElement('style'); style.id='accent-override-style'; document.head.appendChild(style); }
+  // Generate darker shade for --c (nav bg) — darken by 40%
+  var darker = darkenHex(hex, 0.42);
+  style.textContent = ':root, body { --cg: '+hex+' !important; } body.theme-default { --c: '+darker+' !important; }';
+  // Also update nav avatar bg
+  var avatar = document.querySelector('.nav-avatar');
+  if(avatar) avatar.style.background = hex;
+  uiPrefs.accent = hex;
+  if(save){
+    DB.save('uiPrefs', uiPrefs);
+    renderAccentGrid();
+    var bar = document.getElementById('accent-preview-bar');
+    if(bar) bar.style.background = hex;
+    var hexEl = document.getElementById('custom-accent-hex');
+    if(hexEl) hexEl.textContent = hex;
+    toast('Accent colour updated ✓');
+  }
+}
+
+function applyCustomAccent(hex){
+  document.getElementById('custom-accent-hex').textContent = hex;
+  applyAccent(hex, true);
+}
+
+function darkenHex(hex, factor){
+  hex = hex.replace('#','');
+  if(hex.length===3) hex=hex.split('').map(function(c){return c+c;}).join('');
+  var r=Math.round(parseInt(hex.slice(0,2),16)*(1-factor));
+  var g=Math.round(parseInt(hex.slice(2,4),16)*(1-factor));
+  var b=Math.round(parseInt(hex.slice(4,6),16)*(1-factor));
+  return '#'+[r,g,b].map(function(v){return Math.max(0,v).toString(16).padStart(2,'0');}).join('');
+}
+
+// ── DENSITY ──────────────────────────────────────────────────────────────
+function renderDensityRow(){
+  var row = document.getElementById('density-row');
+  if(!row) return;
+  row.innerHTML = DENSITIES.map(function(d){
+    var active = uiPrefs.density===d.id ? 'active' : '';
+    return '<div class="density-option '+active+'" onclick="applyDensity(\''+d.id+'\',true)">'
+      +'<div class="density-icon">'+d.icon+'</div>'
+      +'<div class="density-label">'+d.label+'</div>'
+      +'<div class="density-sub">'+d.sub+'</div>'
+      +'</div>';
+  }).join('');
+}
+
+function applyDensity(id, save){
+  DENSITIES.forEach(function(d){ document.body.classList.remove('density-'+d.id); });
+  document.body.classList.add('density-'+id);
+  uiPrefs.density = id;
+  if(save){
+    DB.save('uiPrefs', uiPrefs);
+    renderDensityRow();
+    toast('Layout density set to '+id+' ✓');
+  }
+}
+
+// ── UI TOGGLES ────────────────────────────────────────────────────────────
+function loadUIToggles(){
+  var map = {showPrices:'tog-prices', showEmoji:'tog-emoji', showAITips:'tog-ai-tips', animations:'tog-anim'};
+  Object.keys(map).forEach(function(k){
+    var el = document.getElementById(map[k]);
+    if(el) el.checked = uiPrefs[k] !== false;
+  });
+}
+
+function saveUIToggle(key, val){
+  uiPrefs[key] = val;
+  DB.save('uiPrefs', uiPrefs);
+  if(key==='animations'){
+    document.querySelectorAll('.page').forEach(function(p){
+      p.style.animation = val ? '' : 'none';
+    });
+  }
+  toast('Setting saved ✓');
+}
+
+// ── PROFILE ──────────────────────────────────────────────────────────────
+function loadProfileFields(){
+  document.getElementById('profile-name').value = profileData.name||'';
+  document.getElementById('profile-tagline').value = profileData.tagline||'';
+  document.getElementById('profile-location').value = profileData.location||'';
+  var av = document.getElementById('profile-avatar');
+  if(av) av.textContent = profileData.avatar||'B';
+  var navAv = document.querySelector('.nav-avatar');
+  if(navAv && profileData.avatar) navAv.textContent = profileData.avatar;
+}
+
+function saveProfile(){
+  profileData.name = document.getElementById('profile-name').value;
+  profileData.tagline = document.getElementById('profile-tagline').value;
+  profileData.location = document.getElementById('profile-location').value;
+  DB.save('profileData', profileData);
+}
+
+function changeAvatarEmoji(){
+  var emoji = prompt('Enter an emoji or your initials (1-2 chars):', profileData.avatar||'B');
+  if(emoji){
+    profileData.avatar = emoji.slice(0,2);
+    DB.save('profileData', profileData);
+    loadProfileFields();
+    toast('Avatar updated ✓');
+  }
+}
+
+// ── DATA MANAGEMENT ───────────────────────────────────────────────────────
+function exportData(){
+  var data = {
+    recipes: recipes,
+    inventory: inventory,
+    localPrices: localPrices,
+    userLocation: userLocation,
+    uiPrefs: uiPrefs,
+    profileData: profileData,
+    exportedAt: new Date().toISOString(),
+    version: '1.0'
+  };
+  var blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url; a.download = 'BakeOS-backup-'+new Date().toISOString().slice(0,10)+'.json';
+  a.click(); URL.revokeObjectURL(url);
+  toast('Data exported ✓');
+}
+
+function importData(e){
+  var file = e.target.files[0]; if(!file) return;
+  var reader = new FileReader();
+  reader.onload = function(){
+    try{
+      var data = JSON.parse(reader.result);
+      if(!confirm('This will replace ALL your current data with the imported file. Continue?')) return;
+      if(data.recipes) { recipes=data.recipes; DB.save('recipes',recipes); }
+      if(data.inventory) { inventory=data.inventory; DB.save('inventory',inventory); }
+      if(data.localPrices) { localPrices=data.localPrices; DB.save('localPrices',localPrices); }
+      if(data.userLocation) { userLocation=data.userLocation; DB.save('userLocation',userLocation); }
+      if(data.uiPrefs) { uiPrefs=data.uiPrefs; DB.save('uiPrefs',uiPrefs); applyTheme(uiPrefs.theme,false); applyAccent(uiPrefs.accent,false); applyDensity(uiPrefs.density,false); }
+      if(data.profileData) { profileData=data.profileData; DB.save('profileData',profileData); }
+      toast('Data imported successfully ✓');
+      renderDashboard();
+    } catch(err){
+      toast('Invalid file — could not import.');
+    }
+  };
+  reader.readAsText(file);
+}
+
+function calcStorage(){
+  var total = 0;
+  try{
+    for(var k in localStorage){
+      if(k.startsWith('bakeos_')) total += (localStorage[k]||'').length;
+    }
+  } catch(e){}
+  var kb = (total/1024).toFixed(1);
+  var el = document.getElementById('storage-used');
+  if(el) el.textContent = kb+' KB used of ~5 MB available ('+Math.round(total/5120)+'% full)';
+}
+
+function resetAllData(){
+  if(!confirm('This will permanently delete ALL your recipes, inventory, prices and settings. This cannot be undone. Are you sure?')) return;
+  if(!confirm('Last chance — delete everything?')) return;
+  try{
+    var keys = [];
+    for(var k in localStorage){ if(k.startsWith('bakeos_')) keys.push(k); }
+    keys.forEach(function(k){ localStorage.removeItem(k); });
+  } catch(e){}
+  recipes=[]; inventory=[]; localPrices=[]; userLocation=null;
+  uiPrefs={theme:'default',accent:'#C9922A',density:'comfortable',showPrices:true,showEmoji:true,showAITips:true,animations:true};
+  profileData={name:'',tagline:'',location:'',avatar:'B'};
+  applyTheme('default',false); applyAccent('#C9922A',false); applyDensity('comfortable',false);
+  toast('All data reset.');
+  nav('dashboard');
+}
+
+</script>
+
+<!-- BARCODE SCANNER MODAL -->
+<div class="modal-bg" id="modal-barcode">
+  <div class="modal" style="max-width:480px;">
+    <div class="modal-header">
+      <div class="modal-title">Scan Barcode</div>
+      <button class="modal-close" onclick="closeBarcodeScanner()">&#x2715;</button>
+    </div>
+    <p style="font-size:12px;color:var(--muted);margin-bottom:10px;">Point your camera at a product barcode to identify it and add it to inventory. Or upload a photo.</p>
+    <div class="scan-preview" id="barcode-preview">
+      <video id="barcode-video" autoplay playsinline muted style="width:100%;height:100%;object-fit:cover;"></video>
+      <div class="scan-overlay-line"></div>
+    </div>
+    <div class="scan-btn-row">
+      <button class="btn btn-secondary btn-sm" id="barcode-start-btn" onclick="startBarcodeCamera()">Start Camera</button>
+      <button class="btn btn-secondary btn-sm" onclick="document.getElementById('barcode-file').click()">Upload Image</button>
+      <input type="file" id="barcode-file" accept="image/*" style="display:none" onchange="handleBarcodeFile(event)">
+    </div>
+    <div class="parsing-indicator" id="barcode-loading">Looking up product...</div>
+    <div class="scan-result-box" id="barcode-result">
+      <div class="section-label" style="margin-bottom:8px;">Product identified</div>
+      <div class="field"><label class="label">Name</label><input class="input" id="bc-name"></div>
+      <div class="two-col">
+        <div class="field"><label class="label">Quantity</label><input class="input" type="number" id="bc-qty" value="1000"></div>
+        <div class="field"><label class="label">Unit</label><input class="input" id="bc-unit" value="g"></div>
+      </div>
+      <div class="two-col">
+        <div class="field"><label class="label">Min stock</label><input class="input" type="number" id="bc-min" value="200"></div>
+        <div class="field"><label class="label">Cost per unit ($)</label><input class="input" type="number" id="bc-cost" value="0.01" step="0.001"></div>
+      </div>
+      <button class="btn btn-primary" style="width:100%" onclick="saveBarcodeItem()">Add to Inventory</button>
+    </div>
+  </div>
+</div>
+
+<!-- RECIPE PHOTO SCAN MODAL -->
+<div class="modal-bg" id="modal-recipe-scan">
+  <div class="modal" style="max-width:520px;">
+    <div class="modal-header">
+      <div class="modal-title">Scan Recipe Photo</div>
+      <button class="modal-close" onclick="closeRecipeScan()">&#x2715;</button>
+    </div>
+    <p style="font-size:12px;color:var(--muted);margin-bottom:10px;">Photograph a recipe from a book, card, or screen and Claude will extract it into your library.</p>
+    <img class="img-preview" id="recipe-scan-preview" alt="Recipe preview">
+    <video id="recipe-scan-video" autoplay playsinline muted style="width:100%;border-radius:8px;display:none;margin-bottom:8px;"></video>
+    <div class="scan-btn-row">
+      <button class="btn btn-secondary btn-sm" onclick="openRecipeCamera()">Take Photo</button>
+      <button class="btn btn-secondary btn-sm" onclick="document.getElementById('recipe-scan-file').click()">Upload Image</button>
+      <button class="btn btn-gold btn-sm" id="recipe-capture-btn" onclick="captureRecipePhoto()" style="display:none;">Capture</button>
+      <input type="file" id="recipe-scan-file" accept="image/*" style="display:none" onchange="handleRecipeScanFile(event)">
+    </div>
+    <div class="parsing-indicator" id="recipe-scan-loading">
+      <div style="font-size:28px;margin-bottom:8px;">&#x1F916;</div>
+      <div>Claude is reading your recipe...</div>
+      <div style="font-size:11px;margin-top:4px;">This takes about 10 seconds</div>
+    </div>
+    <div class="scan-result-box" id="recipe-scan-result">
+      <div class="section-label" style="margin-bottom:8px;">Recipe extracted — review before saving</div>
+      <div class="field"><label class="label">Recipe name</label><input class="input" id="rs-name"></div>
+      <div class="two-col">
+        <div class="field"><label class="label">Size</label><select class="select" id="rs-size"><option>6-inch</option><option selected>8-inch</option><option>10-inch</option><option>Custom</option></select></div>
+        <div class="field"><label class="label">Servings</label><input class="input" type="number" id="rs-servings" value="12"></div>
+      </div>
+      <div class="field"><label class="label">Tags (comma separated)</label><input class="input" id="rs-tags" placeholder="e.g. chocolate, layered"></div>
+      <div class="field"><label class="label">Ingredients (one per line)</label><textarea class="input" id="rs-ingredients" rows="5"></textarea></div>
+      <div class="field"><label class="label">Steps (one per line)</label><textarea class="input" id="rs-steps" rows="6"></textarea></div>
+      <div style="display:flex;gap:8px;margin-top:4px;">
+        <button class="btn btn-secondary" style="flex:1" onclick="closeRecipeScan()">Cancel</button>
+        <button class="btn btn-primary" style="flex:2" onclick="saveScannedRecipe()">Save to Library</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- WEB IMPORT MODAL -->
+<div class="modal-bg" id="modal-web-import">
+  <div class="modal" style="max-width:560px;">
+    <div class="modal-header">
+      <div class="modal-title">&#127760; Import from Web</div>
+      <button class="modal-close" onclick="closeModal('modal-web-import')">&#x2715;</button>
+    </div>
+
+    <div class="import-tabs">
+      <button class="import-tab active" id="tab-url" onclick="switchImportTab('url')">Paste URL</button>
+      <button class="import-tab" id="tab-sites" onclick="switchImportTab('sites')">Popular Sites</button>
+      <button class="import-tab" id="tab-text" onclick="switchImportTab('text')">Paste Text</button>
+    </div>
+
+    <!-- URL PANEL -->
+    <div class="import-panel active" id="panel-url">
+      <div class="field">
+        <label class="label">Recipe URL</label>
+        <div style="display:flex;gap:8px;">
+          <input class="input" id="import-url" placeholder="https://www.allrecipes.com/recipe/..." style="flex:1;">
+          <button class="btn btn-primary" onclick="importFromUrl()">Import</button>
+        </div>
+        <div class="url-status" id="url-status"></div>
+      </div>
+      <div class="parsing-indicator" id="url-loading">
+        <div style="font-size:24px;margin-bottom:6px;">&#x1F916;</div>
+        <div>Claude is reading the page...</div>
+        <div style="font-size:11px;margin-top:4px;">Fetching and extracting recipe</div>
+      </div>
+      <p style="font-size:11px;color:var(--muted);line-height:1.6;margin-top:8px;">Works with AllRecipes, BBC Good Food, Tasty, King Arthur Baking, Serious Eats, NYT Cooking, Food Network, and most recipe blogs. Paste any recipe URL above.</p>
+    </div>
+
+    <!-- POPULAR SITES PANEL -->
+    <div class="import-panel" id="panel-sites">
+      <p style="font-size:12px;color:var(--muted);margin-bottom:12px;">Click a site to open it, find a recipe you like, copy the URL, then come back and paste it in the URL tab.</p>
+      <div class="site-grid" id="site-grid"></div>
+      <div style="background:var(--warm);border:.5px solid var(--border);border-radius:8px;padding:12px;margin-top:4px;">
+        <div style="font-size:11px;font-weight:500;color:var(--c);margin-bottom:6px;">How to import from any site</div>
+        <div style="font-size:11px;color:var(--muted);line-height:1.8;">
+          1. Click a site above to open it in a new tab<br>
+          2. Find a recipe you want to save<br>
+          3. Copy the page URL from your browser bar<br>
+          4. Switch to the <strong>Paste URL</strong> tab and paste it<br>
+          5. Claude extracts ingredients and steps automatically
+        </div>
+      </div>
+    </div>
+
+    <!-- PASTE TEXT PANEL -->
+    <div class="import-panel" id="panel-text">
+      <p style="font-size:12px;color:var(--muted);margin-bottom:10px;">Paste raw recipe text — from any source, in any format. Claude will structure it automatically.</p>
+      <div class="field">
+        <label class="label">Recipe text</label>
+        <textarea class="input" id="import-text" rows="10" placeholder="Paste recipe text here... e.g. from a website, email, or message. Include title, ingredients and steps."></textarea>
+      </div>
+      <button class="btn btn-primary" style="width:100%" onclick="importFromText()">Extract Recipe</button>
+      <div class="parsing-indicator" id="text-loading">
+        <div style="font-size:24px;margin-bottom:6px;">&#x1F916;</div>
+        <div>Claude is structuring your recipe...</div>
+      </div>
+    </div>
+
+    <!-- RESULT (shared across all tabs) -->
+    <div class="scan-result-box" id="web-import-result" style="margin-top:12px;">
+      <div class="section-label" style="margin-bottom:8px;">Recipe extracted &#x2014; review before saving</div>
+      <div class="field"><label class="label">Recipe name</label><input class="input" id="wi-name"></div>
+      <div class="two-col">
+        <div class="field"><label class="label">Size</label>
+          <select class="select" id="wi-size">
+            <option>6-inch</option><option selected>8-inch</option><option>10-inch</option><option>12-inch</option><option>Custom</option>
+          </select>
+        </div>
+        <div class="field"><label class="label">Servings</label><input class="input" type="number" id="wi-servings" value="12"></div>
+      </div>
+      <div class="field"><label class="label">Tags</label><input class="input" id="wi-tags" placeholder="chocolate, layered, birthday"></div>
+      <div class="field"><label class="label">Description</label><input class="input" id="wi-desc" placeholder="Brief description"></div>
+      <div class="field"><label class="label">Ingredients (one per line: amount unit name)</label><textarea class="input" id="wi-ingredients" rows="6"></textarea></div>
+      <div class="field"><label class="label">Steps (one per line)</label><textarea class="input" id="wi-steps" rows="7"></textarea></div>
+      <div style="display:flex;gap:8px;margin-top:4px;">
+        <button class="btn btn-secondary" style="flex:1" onclick="closeModal('modal-web-import')">Cancel</button>
+        <button class="btn btn-primary" style="flex:2" onclick="saveWebImportRecipe()">Save to Library</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- LOCAL PRICE ITEM MODAL -->
+<div class="modal-bg" id="modal-price-item">
+  <div class="modal" style="max-width:380px;">
+    <div class="modal-header">
+      <div class="modal-title">Add Local Price</div>
+      <button class="modal-close" onclick="closeModal('modal-price-item')">&#x2715;</button>
+    </div>
+    <div class="field"><label class="label">Ingredient name</label><input class="input" id="pi-name" placeholder="e.g. Plain flour"></div>
+    <div class="two-col">
+      <div class="field"><label class="label">Price</label><input class="input" type="number" id="pi-price" value="1.50" step="0.01" min="0"></div>
+      <div class="field"><label class="label">Per</label><input class="input" id="pi-unit" value="1 kg" placeholder="1 kg / 500 g / dozen"></div>
+    </div>
+    <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:8px;">
+      <button class="btn btn-secondary" onclick="closeModal('modal-price-item')">Cancel</button>
+      <button class="btn btn-primary" onclick="savePriceItem()">Save Price</button>
+    </div>
+  </div>
+</div>
+
+<!-- LOCATION PICKER MODAL -->
+<div class="modal-bg" id="modal-location">
+  <div class="modal" style="max-width:400px;">
+    <div class="modal-header">
+      <div class="modal-title">&#x1F4CD; Set Your Location</div>
+      <button class="modal-close" onclick="closeModal('modal-location')">&#x2715;</button>
+    </div>
+    <p style="font-size:12px;color:var(--muted);margin-bottom:14px;">BakeOS uses your location to estimate typical supermarket prices for baking ingredients in your area.</p>
+    <div class="field">
+      <label class="label">City or region</label>
+      <input class="input" id="loc-city" placeholder="e.g. London, New York, Lagos, Milan..." oninput="locationSearchDebounce()">
+    </div>
+    <div class="field">
+      <label class="label">Country</label>
+      <input class="input" id="loc-country" placeholder="e.g. United Kingdom, USA, Nigeria...">
+    </div>
+    <div class="field">
+      <label class="label">Currency code</label>
+      <input class="input" id="loc-currency" value="USD" placeholder="USD / GBP / EUR / NGN..." style="width:120px;">
+    </div>
+    <div style="background:var(--warm);border:.5px solid var(--border);border-radius:8px;padding:10px 12px;margin-bottom:14px;font-size:11px;color:var(--muted);line-height:1.6;">
+      &#x1F916; Claude AI will estimate typical supermarket prices for common baking ingredients in your area. You can override any price manually.
+    </div>
+    <div style="display:flex;gap:8px;justify-content:flex-end;">
+      <button class="btn btn-secondary" onclick="closeModal('modal-location')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveLocationAndFetchPrices()">Set Location &amp; Load Prices</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- PWA INSTALL BANNER -->
+<div id="install-banner">
+  <div id="install-banner-text">
+    <div id="install-banner-title">Add BakeOS to your home screen</div>
+    <div id="install-banner-sub">Works offline &middot; Instant access &middot; No app store needed</div>
+  </div>
+  <button id="install-banner-btn" onclick="triggerInstall()">Install</button>
+  <button id="install-banner-dismiss" onclick="dismissInstallBanner()" aria-label="Dismiss">&times;</button>
+</div>
+
+
+<!-- ═══════════════════════════════════════════ SETTINGS ════ -->
+<div class="page" id="page-settings">
+  <div class="page-title">Settings</div>
+  <div class="page-sub">Customise BakeOS to match your style.</div>
+  <div class="settings-layout">
+
+    <!-- SETTINGS NAV -->
+    <div>
+      <div class="settings-nav">
+        <button class="settings-nav-item active" onclick="switchSettingsTab('appearance')">&#x1F3A8; Appearance</button>
+        <button class="settings-nav-item" onclick="switchSettingsTab('profile')">&#x1F464; Profile</button>
+        <button class="settings-nav-item" onclick="switchSettingsTab('data')">&#x1F4BE; Data</button>
+        <button class="settings-nav-item" onclick="switchSettingsTab('about')">&#x2139;&#xFE0F; About</button>
+      </div>
+    </div>
+
+    <!-- SETTINGS CONTENT -->
+    <div>
+
+      <!-- APPEARANCE -->
+      <div class="settings-section active" id="settings-appearance">
+
+        <div class="settings-block">
+          <div class="settings-block-title">Colour theme</div>
+          <div class="settings-block-sub">Choose the overall look and feel of BakeOS.</div>
+          <div class="theme-grid" id="theme-grid"></div>
+        </div>
+
+        <div class="settings-block">
+          <div class="settings-block-title">Accent colour</div>
+          <div class="settings-block-sub">The highlight colour used for buttons, prices, and active states.</div>
+          <div class="colour-preview-bar" id="accent-preview-bar"></div>
+          <div class="accent-grid" id="accent-grid"></div>
+          <div class="custom-colour-row">
+            <label class="label" style="margin:0;white-space:nowrap;">Custom colour</label>
+            <input type="color" id="custom-accent-picker" style="width:44px;height:36px;border-radius:8px;border:.5px solid var(--border);cursor:pointer;padding:2px;" oninput="applyCustomAccent(this.value)">
+            <span style="font-family:'DM Mono',monospace;font-size:12px;color:var(--muted);" id="custom-accent-hex">#C9922A</span>
+          </div>
+        </div>
+
+        <div class="settings-block">
+          <div class="settings-block-title">Layout density</div>
+          <div class="settings-block-sub">Controls spacing, padding, and font size throughout the app.</div>
+          <div class="density-row" id="density-row"></div>
+        </div>
+
+        <div class="settings-block">
+          <div class="settings-block-title">Interface options</div>
+          <div class="settings-block-sub">Toggle individual UI behaviours.</div>
+          <div class="settings-row">
+            <div><div class="settings-row-label">Show prices on recipe cards</div><div class="settings-row-sub">Display calculated price in the recipe library grid</div></div>
+            <label class="toggle-wrap"><input type="checkbox" id="tog-prices" checked onchange="saveUIToggle('showPrices',this.checked)"><span class="toggle-slider"></span></label>
+          </div>
+          <div class="settings-row">
+            <div><div class="settings-row-label">Show recipe emoji</div><div class="settings-row-sub">Display emoji icons on recipe cards and headers</div></div>
+            <label class="toggle-wrap"><input type="checkbox" id="tog-emoji" checked onchange="saveUIToggle('showEmoji',this.checked)"><span class="toggle-slider"></span></label>
+          </div>
+          <div class="settings-row">
+            <div><div class="settings-row-label">AI tips on dashboard</div><div class="settings-row-sub">Show contextual AI suggestions on the home screen</div></div>
+            <label class="toggle-wrap"><input type="checkbox" id="tog-ai-tips" checked onchange="saveUIToggle('showAITips',this.checked)"><span class="toggle-slider"></span></label>
+          </div>
+          <div class="settings-row">
+            <div><div class="settings-row-label">Animated transitions</div><div class="settings-row-sub">Fade and slide effects when switching pages</div></div>
+            <label class="toggle-wrap"><input type="checkbox" id="tog-anim" checked onchange="saveUIToggle('animations',this.checked)"><span class="toggle-slider"></span></label>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- PROFILE -->
+      <div class="settings-section" id="settings-profile">
+        <div class="settings-block">
+          <div class="settings-block-title">Your profile</div>
+          <div class="settings-block-sub">Personalise your BakeOS identity.</div>
+          <div style="display:flex;align-items:center;gap:16px;margin-bottom:16px;">
+            <div class="profile-avatar-big" id="profile-avatar" onclick="changeAvatarEmoji()">B</div>
+            <div>
+              <div style="font-size:12px;color:var(--muted);margin-bottom:4px;">Tap to change avatar</div>
+              <div style="font-size:11px;color:var(--muted);">Emoji or initials</div>
+            </div>
+          </div>
+          <div class="field"><label class="label">Your name / bakery name</label><input class="input" id="profile-name" placeholder="e.g. Nathaniel's Bakery" oninput="saveProfile()"></div>
+          <div class="field"><label class="label">Tagline</label><input class="input" id="profile-tagline" placeholder="e.g. Handcrafted cakes for every occasion" oninput="saveProfile()"></div>
+          <div class="field"><label class="label">Location</label><input class="input" id="profile-location" placeholder="e.g. Milan, Italy" oninput="saveProfile()"></div>
+        </div>
+      </div>
+
+      <!-- DATA -->
+      <div class="settings-section" id="settings-data">
+        <div class="settings-block">
+          <div class="settings-block-title">Your data</div>
+          <div class="settings-block-sub">Export, import or reset your BakeOS data.</div>
+          <div class="settings-row">
+            <div><div class="settings-row-label">Export all data</div><div class="settings-row-sub">Download recipes, inventory and prices as JSON</div></div>
+            <button class="btn btn-secondary btn-sm" onclick="exportData()">Export</button>
+          </div>
+          <div class="settings-row">
+            <div><div class="settings-row-label">Import data</div><div class="settings-row-sub">Restore from a previous BakeOS export</div></div>
+            <button class="btn btn-secondary btn-sm" onclick="document.getElementById('import-data-file').click()">Import</button>
+          </div>
+          <input type="file" id="import-data-file" accept=".json" style="display:none" onchange="importData(event)">
+          <div class="settings-row">
+            <div><div class="settings-row-label">Storage used</div><div class="settings-row-sub" id="storage-used">Calculating...</div></div>
+            <button class="btn btn-secondary btn-sm" onclick="calcStorage()">Refresh</button>
+          </div>
+          <div style="margin-top:16px;padding-top:14px;border-top:.5px solid var(--border);">
+            <div style="font-size:13px;font-weight:500;color:var(--danger);margin-bottom:6px;">Danger zone</div>
+            <button class="btn btn-danger" onclick="resetAllData()">Reset all data</button>
+            <div style="font-size:11px;color:var(--muted);margin-top:6px;">Deletes all recipes, inventory and settings permanently.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ABOUT -->
+      <div class="settings-section" id="settings-about">
+        <div class="settings-block">
+          <div style="text-align:center;padding:16px 0;">
+            <div style="font-family:'Playfair Display',serif;font-size:32px;color:var(--c);margin-bottom:4px;">BakeOS</div>
+            <div style="font-size:12px;color:var(--muted);margin-bottom:16px;">The intelligent baking ecosystem</div>
+            <div style="font-size:11px;color:var(--muted);line-height:1.8;">Version 1.0 &nbsp;&middot;&nbsp; Built for serious bakers<br>AI powered by Claude &nbsp;&middot;&nbsp; Runs entirely in your browser<br>All data stored locally on your device</div>
+          </div>
+        </div>
+        <div class="settings-block">
+          <div class="settings-block-title">Features</div>
+          <div class="settings-block-sub">Everything included in BakeOS 1.0</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
+            <div style="font-size:12px;color:var(--muted);padding:4px 0;">&#x2713; Recipe library</div>
+            <div style="font-size:12px;color:var(--muted);padding:4px 0;">&#x2713; Live pricing calculator</div>
+            <div style="font-size:12px;color:var(--muted);padding:4px 0;">&#x2713; Guided baking mode</div>
+            <div style="font-size:12px;color:var(--muted);padding:4px 0;">&#x2713; Multi-timer system</div>
+            <div style="font-size:12px;color:var(--muted);padding:4px 0;">&#x2713; Smart inventory</div>
+            <div style="font-size:12px;color:var(--muted);padding:4px 0;">&#x2713; AI kitchen assistant</div>
+            <div style="font-size:12px;color:var(--muted);padding:4px 0;">&#x2713; Barcode scanner</div>
+            <div style="font-size:12px;color:var(--muted);padding:4px 0;">&#x2713; Recipe photo scan</div>
+            <div style="font-size:12px;color:var(--muted);padding:4px 0;">&#x2713; Web recipe import</div>
+            <div style="font-size:12px;color:var(--muted);padding:4px 0;">&#x2713; Local pricing engine</div>
+            <div style="font-size:12px;color:var(--muted);padding:4px 0;">&#x2713; PWA &mdash; installs on phone</div>
+            <div style="font-size:12px;color:var(--muted);padding:4px 0;">&#x2713; Works offline</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
