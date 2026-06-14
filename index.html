@@ -520,6 +520,63 @@
       #typewriter { animation: none; }
       .hero-tag::before { animation: none; }
     }
+  
+    /* ── Project mockup overrides ──────────────────────────────── */
+    .projects-grid {
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 2rem !important;
+    }
+    .proj-card {
+      flex-direction: row !important;
+      min-height: 260px !important;
+      border-radius: 6px !important;
+    }
+    .proj-mockup {
+      width: 55%;
+      flex-shrink: 0;
+      overflow: hidden;
+      background: #071020;
+      border-radius: 6px 0 0 6px;
+      position: relative;
+    }
+    .proj-mockup svg { width: 100%; height: 100%; display: block; }
+    .proj-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 2rem !important;
+    }
+    .proj-top { padding: 0 0 1rem 0 !important; }
+    .proj-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      margin-top: 1rem;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      color: var(--navy);
+      background: var(--teal);
+      padding: 0.45rem 1rem;
+      border-radius: 3px;
+      align-self: flex-start;
+      transition: background 0.2s;
+    }
+    .proj-link:hover { background: var(--brass); color: var(--navy); }
+    .proj-link.ghost {
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid var(--border);
+    }
+    .proj-link.ghost:hover { border-color: var(--teal); color: var(--teal); }
+    .proj-link-row { display: flex; gap: 0.6rem; }
+    @media (max-width: 768px) {
+      .proj-card { flex-direction: column !important; }
+      .proj-mockup { width: 100% !important; border-radius: 6px 6px 0 0 !important; min-height: 220px; }
+    }
+
   </style>
 </head>
 <body>
@@ -713,14 +770,112 @@
       <div class="projects-grid">
 
         <div class="proj-card reveal">
-          <div class="proj-top">
-            <div class="proj-icon">🗂</div>
-            <div class="proj-num">PROJECT 01</div>
-          </div>
+          <div class="proj-mockup"><svg viewBox="0 0 700 380" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;display:block;">
+  <rect width="700" height="380" fill="#0B1629"/>
+  <!-- Chrome bar -->
+  <rect width="700" height="32" fill="#060E1C" rx="0"/>
+  <circle cx="16" cy="16" r="5" fill="#E05555"/>
+  <circle cx="32" cy="16" r="5" fill="#C4962A"/>
+  <circle cx="48" cy="16" r="5" fill="#0DD4C4"/>
+  <rect x="68" y="8" width="490" height="16" fill="#0F2040" rx="2"/>
+  <text x="313" y="20" font-family="monospace" font-size="8" fill="#7A96B2" text-anchor="middle">xavielpendragon.github.io/APTC-495-Squadron-Manning-Board</text>
+  <!-- App toolbar -->
+  <rect y="32" width="700" height="34" fill="#071020"/>
+  <text x="14" y="54" font-family="system-ui,sans-serif" font-size="10" font-weight="700" fill="#0DD4C4">USAF</text>
+  <text x="56" y="54" font-family="system-ui,sans-serif" font-size="10" fill="#EEF4FB">Squadron Manning Board</text>
+  <rect x="340" y="42" width="56" height="16" fill="#132338" rx="2"/>
+  <text x="368" y="54" font-family="system-ui,sans-serif" font-size="7" fill="#7A96B2" text-anchor="middle">Import CSV</text>
+  <rect x="400" y="42" width="56" height="16" fill="#132338" rx="2"/>
+  <text x="428" y="54" font-family="system-ui,sans-serif" font-size="7" fill="#7A96B2" text-anchor="middle">Export PDF</text>
+  <rect x="460" y="42" width="40" height="16" fill="#0DD4C4" rx="2"/>
+  <text x="480" y="54" font-family="system-ui,sans-serif" font-size="7" fill="#071020" text-anchor="middle" font-weight="700">+ Add</text>
+  <rect x="504" y="42" width="52" height="16" fill="#132338" rx="2"/>
+  <text x="530" y="54" font-family="system-ui,sans-serif" font-size="7" fill="#C4962A" text-anchor="middle">What-If</text>
+  <rect x="560" y="42" width="36" height="16" fill="#132338" rx="2"/>
+  <text x="578" y="54" font-family="system-ui,sans-serif" font-size="7" fill="#7A96B2" text-anchor="middle">Undo</text>
+  <rect x="600" y="42" width="36" height="16" fill="#132338" rx="2"/>
+  <text x="618" y="54" font-family="system-ui,sans-serif" font-size="7" fill="#E05555" text-anchor="middle">Reset</text>
+  <!-- Alpha Flight -->
+  <rect x="8" y="72" width="216" height="18" fill="#1E3A5F" rx="2"/>
+  <text x="14" y="85" font-family="system-ui,sans-serif" font-size="9" font-weight="700" fill="#0DD4C4">ALPHA FLIGHT</text>
+  <text x="204" y="85" font-family="system-ui,sans-serif" font-size="8" fill="#7A96B2" text-anchor="end">4/6</text>
+  <rect x="8" y="93" width="100" height="50" fill="#132338" rx="3" stroke="#1E3A5F" stroke-width="1"/>
+  <text x="14" y="107" font-family="system-ui,sans-serif" font-size="8" font-weight="700" fill="#EEF4FB">SSgt Johnson</text>
+  <text x="14" y="118" font-family="system-ui,sans-serif" font-size="7" fill="#7A96B2">3D1X2 · Cyber Sys</text>
+  <rect x="14" y="124" width="46" height="12" fill="rgba(13,212,196,0.15)" rx="2"/>
+  <text x="37" y="133" font-family="system-ui,sans-serif" font-size="7" fill="#0DD4C4" text-anchor="middle">Available</text>
+  <rect x="114" y="93" width="100" height="50" fill="#132338" rx="3" stroke="#1E3A5F" stroke-width="1"/>
+  <text x="120" y="107" font-family="system-ui,sans-serif" font-size="8" font-weight="700" fill="#EEF4FB">TSgt Rivera</text>
+  <text x="120" y="118" font-family="system-ui,sans-serif" font-size="7" fill="#7A96B2">1C7X1 · SERE</text>
+  <rect x="120" y="124" width="30" height="12" fill="rgba(196,150,42,0.15)" rx="2"/>
+  <text x="135" y="133" font-family="system-ui,sans-serif" font-size="7" fill="#C4962A" text-anchor="middle">TDY</text>
+  <!-- Bravo Flight -->
+  <rect x="232" y="72" width="216" height="18" fill="#1E3A5F" rx="2"/>
+  <text x="238" y="85" font-family="system-ui,sans-serif" font-size="9" font-weight="700" fill="#0DD4C4">BRAVO FLIGHT</text>
+  <text x="438" y="85" font-family="system-ui,sans-serif" font-size="8" fill="#7A96B2" text-anchor="end">3/6</text>
+  <rect x="232" y="93" width="100" height="50" fill="#132338" rx="3" stroke="#1E3A5F" stroke-width="1"/>
+  <text x="238" y="107" font-family="system-ui,sans-serif" font-size="8" font-weight="700" fill="#EEF4FB">A1C Martinez</text>
+  <text x="238" y="118" font-family="system-ui,sans-serif" font-size="7" fill="#7A96B2">2A3X3 · Mx Tech</text>
+  <rect x="238" y="124" width="46" height="12" fill="rgba(13,212,196,0.15)" rx="2"/>
+  <text x="261" y="133" font-family="system-ui,sans-serif" font-size="7" fill="#0DD4C4" text-anchor="middle">Available</text>
+  <rect x="338" y="93" width="100" height="50" fill="#132338" rx="3" stroke="#1E3A5F" stroke-width="1"/>
+  <text x="344" y="107" font-family="system-ui,sans-serif" font-size="8" font-weight="700" fill="#EEF4FB">SrA Thompson</text>
+  <text x="344" y="118" font-family="system-ui,sans-serif" font-size="7" fill="#7A96B2">2E1X3 · Comm</text>
+  <rect x="344" y="124" width="30" height="12" fill="rgba(224,85,85,0.15)" rx="2"/>
+  <text x="359" y="133" font-family="system-ui,sans-serif" font-size="7" fill="#E05555" text-anchor="middle">Medical</text>
+  <!-- Charlie Flight -->
+  <rect x="456" y="72" width="236" height="18" fill="#1E3A5F" rx="2"/>
+  <text x="462" y="85" font-family="system-ui,sans-serif" font-size="9" font-weight="700" fill="#0DD4C4">CHARLIE FLIGHT</text>
+  <text x="682" y="85" font-family="system-ui,sans-serif" font-size="8" fill="#7A96B2" text-anchor="end">5/6</text>
+  <rect x="456" y="93" width="100" height="50" fill="#132338" rx="3" stroke="#1E3A5F" stroke-width="1"/>
+  <text x="462" y="107" font-family="system-ui,sans-serif" font-size="8" font-weight="700" fill="#EEF4FB">MSgt Williams</text>
+  <text x="462" y="118" font-family="system-ui,sans-serif" font-size="7" fill="#7A96B2">1N0X1 · Intel</text>
+  <rect x="462" y="124" width="46" height="12" fill="rgba(13,212,196,0.15)" rx="2"/>
+  <text x="485" y="133" font-family="system-ui,sans-serif" font-size="7" fill="#0DD4C4" text-anchor="middle">Available</text>
+  <rect x="562" y="93" width="100" height="50" fill="#132338" rx="3" stroke="#1E3A5F" stroke-width="1"/>
+  <text x="568" y="107" font-family="system-ui,sans-serif" font-size="8" font-weight="700" fill="#EEF4FB">Capt Davis</text>
+  <text x="568" y="118" font-family="system-ui,sans-serif" font-size="7" fill="#7A96B2">13S3 · Space Ops</text>
+  <rect x="568" y="124" width="46" height="12" fill="rgba(13,212,196,0.15)" rx="2"/>
+  <text x="591" y="133" font-family="system-ui,sans-serif" font-size="7" fill="#0DD4C4" text-anchor="middle">Available</text>
+  <!-- Unassigned -->
+  <rect x="8" y="150" width="684" height="18" fill="#0F2040" rx="2" stroke="#1E3A5F" stroke-width="1" stroke-dasharray="4,2"/>
+  <text x="14" y="163" font-family="system-ui,sans-serif" font-size="8" fill="#7A96B2">UNASSIGNED — drag personnel here to unassign</text>
+  <rect x="8" y="172" width="90" height="50" fill="#0B1629" rx="3" stroke="#1E3A5F" stroke-width="1" stroke-dasharray="3,2"/>
+  <text x="53" y="195" font-family="system-ui,sans-serif" font-size="8" fill="#7A96B2" text-anchor="middle">SrA Chen</text>
+  <text x="53" y="207" font-family="system-ui,sans-serif" font-size="7" fill="#555" text-anchor="middle">2T2X1</text>
+  <!-- Deployed -->
+  <rect x="8" y="230" width="684" height="18" fill="#1A0F0F" rx="2"/>
+  <text x="14" y="243" font-family="system-ui,sans-serif" font-size="8" fill="#E05555">DEPLOYED — 0 personnel currently deployed</text>
+  <!-- Summary stats -->
+  <rect x="0" y="256" width="700" height="1" fill="#1E3A5F"/>
+  <text x="14" y="274" font-family="monospace" font-size="8" fill="#555">MANNING SUMMARY</text>
+  <rect x="14" y="280" width="90" height="40" fill="#132338" rx="3"/>
+  <text x="59" y="298" font-family="system-ui,sans-serif" font-size="18" font-weight="700" fill="#0DD4C4" text-anchor="middle">12</text>
+  <text x="59" y="312" font-family="system-ui,sans-serif" font-size="7" fill="#7A96B2" text-anchor="middle">AVAILABLE</text>
+  <rect x="112" y="280" width="90" height="40" fill="#132338" rx="3"/>
+  <text x="157" y="298" font-family="system-ui,sans-serif" font-size="18" font-weight="700" fill="#C4962A" text-anchor="middle">3</text>
+  <text x="157" y="312" font-family="system-ui,sans-serif" font-size="7" fill="#7A96B2" text-anchor="middle">TDY</text>
+  <rect x="210" y="280" width="90" height="40" fill="#132338" rx="3"/>
+  <text x="255" y="298" font-family="system-ui,sans-serif" font-size="18" font-weight="700" fill="#E05555" text-anchor="middle">1</text>
+  <text x="255" y="312" font-family="system-ui,sans-serif" font-size="7" fill="#7A96B2" text-anchor="middle">MEDICAL</text>
+  <rect x="308" y="280" width="90" height="40" fill="#132338" rx="3"/>
+  <text x="353" y="298" font-family="system-ui,sans-serif" font-size="18" font-weight="700" fill="#7A96B2" text-anchor="middle">2</text>
+  <text x="353" y="312" font-family="system-ui,sans-serif" font-size="7" fill="#7A96B2" text-anchor="middle">LEAVE</text>
+  <rect x="406" y="280" width="90" height="40" fill="#132338" rx="3"/>
+  <text x="451" y="298" font-family="system-ui,sans-serif" font-size="18" font-weight="700" fill="#7A96B2" text-anchor="middle">0</text>
+  <text x="451" y="312" font-family="system-ui,sans-serif" font-size="7" fill="#7A96B2" text-anchor="middle">DEPLOYED</text>
+  <text x="690" y="368" font-family="monospace" font-size="7" fill="#1E3A5F" text-anchor="end">Local Only · v1.0</text>
+</svg></div>
           <div class="proj-body">
+            <div class="proj-top">
+              <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+                <div class="proj-icon">🗂</div>
+                <div class="proj-num">PROJECT 01 · CAPSTONE</div>
+              </div>
+            </div>
             <div class="proj-title">Squadron Manning Board</div>
             <div class="proj-stack">ES MODULES · POUCHDB · COUCHDB · HTML/CSS</div>
-            <p class="proj-desc">A local-first web application for Air Force squadron personnel tracking and unit readiness visibility. Features role-based access control, drag-and-drop assignment management, activity logging, idle session timeouts, CSV import/export, and full mobile touch support — built across eight modular JS modules with offline-first architecture.</p>
+            <p class="proj-desc">A local-first web application for Air Force squadron personnel tracking and unit readiness visibility. Built across eight modular JavaScript ES modules with role-based access control, drag-and-drop assignment management, activity logging, idle session timeouts, CSV import/export, and mobile touch support. Resolved a complex circular module dependency that caused silent startup failures — restoring full application functionality and delivering a production-ready capstone artifact on schedule.</p>
             <div class="proj-tags">
               <span class="proj-tag">Offline-First</span>
               <span class="proj-tag">RBAC</span>
@@ -728,128 +883,236 @@
               <span class="proj-tag">Military Personnel</span>
               <span class="proj-tag">Capstone Project</span>
             </div>
-          </div>
-        </div>
-
-        <div class="proj-card reveal">
-          <div class="proj-top">
-            <div class="proj-icon brass-icon">💪</div>
-            <div class="proj-num">PROJECT 02</div>
-          </div>
-          <div class="proj-body">
-            <div class="proj-title">Rooted Sila</div>
-            <div class="proj-stack">REACT · VITE · KATCH-MCARDLE · PWA</div>
-            <p class="proj-desc">A personal fitness PWA built around a concrete, time-bound body composition goal. Includes a BOD POD baseline module using the Katch-McArdle formula, interactive composition sliders, and a live visualization bar — all designed to translate validated exercise science into a personalized daily tool.</p>
-            <div class="proj-tags">
-              <span class="proj-tag">Progressive Web App</span>
-              <span class="proj-tag">React Hooks</span>
-              <span class="proj-tag">Formula-Driven UI</span>
-              <span class="proj-tag">Body Composition</span>
+            <div class="proj-link-row">
+              <a href="https://xavielpendragon.github.io/APTC-495-Squadron-Manning-Board/" target="_blank" rel="noopener" class="proj-link">↗ View Live App</a>
+              <a href="https://github.com/xavielpendragon/APTC-495-Squadron-Manning-Board" target="_blank" rel="noopener" class="proj-link ghost">GitHub Repo</a>
             </div>
           </div>
         </div>
 
         <div class="proj-card reveal">
-          <div class="proj-top">
-            <div class="proj-icon muted-icon">🍞</div>
-            <div class="proj-num">PROJECT 03</div>
-          </div>
+          <div class="proj-mockup"><svg viewBox="0 0 700 380" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;display:block;">
+  <rect width="700" height="380" fill="#F8FAF7"/>
+  <!-- Chrome -->
+  <rect width="700" height="32" fill="#2A2A2A" rx="0"/>
+  <circle cx="16" cy="16" r="5" fill="#E05555"/>
+  <circle cx="32" cy="16" r="5" fill="#F0A020"/>
+  <circle cx="48" cy="16" r="5" fill="#4CAF50"/>
+  <rect x="68" y="8" width="490" height="16" fill="#3A3A3A" rx="2"/>
+  <text x="313" y="20" font-family="monospace" font-size="8" fill="#888" text-anchor="middle">Rooted Sila · Personal Fitness PWA</text>
+  <!-- App header -->
+  <rect y="32" width="700" height="48" fill="#1B3A2A"/>
+  <text x="24" y="62" font-family="Georgia,serif" font-size="18" font-weight="700" fill="#A8D5A2" letter-spacing="1">Rooted Sila</text>
+  <text x="152" y="62" font-family="system-ui,sans-serif" font-size="9" fill="rgba(168,213,162,0.5)">· FITNESS &amp; BODY COMPOSITION</text>
+  <rect x="560" y="44" width="60" height="22" fill="rgba(168,213,162,0.15)" rx="3" stroke="rgba(168,213,162,0.3)" stroke-width="1"/>
+  <text x="590" y="59" font-family="system-ui,sans-serif" font-size="8" fill="#A8D5A2" text-anchor="middle">Dashboard</text>
+  <rect x="630" y="44" width="50" height="22" fill="#4A7C59" rx="3"/>
+  <text x="655" y="59" font-family="system-ui,sans-serif" font-size="8" fill="#fff" text-anchor="middle">Log Today</text>
+  <!-- Main content area -->
+  <!-- BOD POD Baseline Card -->
+  <rect x="14" y="90" width="420" height="200" fill="#fff" rx="6" stroke="#E0EAD8" stroke-width="1"/>
+  <rect x="14" y="90" width="420" height="4" fill="#4A7C59" rx="3"/>
+  <text x="28" y="113" font-family="system-ui,sans-serif" font-size="10" font-weight="700" fill="#1B3A2A">Body Composition Overview</text>
+  <text x="28" y="127" font-family="system-ui,sans-serif" font-size="8" fill="#888">Based on BOD POD baseline · Katch-McArdle Formula</text>
+  <!-- Composition Bar -->
+  <text x="28" y="150" font-family="system-ui,sans-serif" font-size="8" fill="#555">Current Composition</text>
+  <rect x="28" y="155" width="392" height="22" fill="#F0F4EE" rx="4"/>
+  <rect x="28" y="155" width="137" height="22" fill="#E07A5F" rx="4"/>
+  <rect x="165" y="155" width="255" height="22" fill="#4A7C59" rx="0"/>
+  <rect x="389" y="155" width="31" height="22" fill="#4A7C59" rx="4"/>
+  <text x="97" y="170" font-family="system-ui,sans-serif" font-size="8" fill="#fff" text-anchor="middle" font-weight="600">Fat 34.9%</text>
+  <text x="310" y="170" font-family="system-ui,sans-serif" font-size="8" fill="#fff" text-anchor="middle" font-weight="600">Lean Mass 65.1%</text>
+  <text x="28" y="194" font-family="system-ui,sans-serif" font-size="8" fill="#555">Goal Composition (Sep 2026)</text>
+  <rect x="28" y="199" width="392" height="22" fill="#F0F4EE" rx="4"/>
+  <rect x="28" y="199" width="70" height="22" fill="#E07A5F" rx="4"/>
+  <rect x="98" y="199" width="322" height="22" fill="#4A7C59" rx="0"/>
+  <rect x="389" y="199" width="31" height="22" fill="#4A7C59" rx="4"/>
+  <text x="63" y="214" font-family="system-ui,sans-serif" font-size="8" fill="#fff" text-anchor="middle" font-weight="600">18%</text>
+  <text x="248" y="214" font-family="system-ui,sans-serif" font-size="8" fill="#fff" text-anchor="middle" font-weight="600">Lean Mass 82%</text>
+  <!-- Sliders -->
+  <text x="28" y="242" font-family="system-ui,sans-serif" font-size="8" fill="#555">Goal Body Fat %</text>
+  <rect x="28" y="248" width="392" height="6" fill="#E0EAD8" rx="3"/>
+  <rect x="28" y="248" width="100" height="6" fill="#4A7C59" rx="3"/>
+  <circle cx="128" cy="251" r="7" fill="#1B3A2A" stroke="#fff" stroke-width="2"/>
+  <text x="420" y="255" font-family="monospace" font-size="8" fill="#4A7C59" text-anchor="end">18.0%</text>
+  <text x="28" y="272" font-family="system-ui,sans-serif" font-size="8" fill="#555">Goal Weight (lbs)</text>
+  <rect x="28" y="278" width="392" height="6" fill="#E0EAD8" rx="3"/>
+  <rect x="28" y="278" width="200" height="6" fill="#4A7C59" rx="3"/>
+  <circle cx="228" cy="281" r="7" fill="#1B3A2A" stroke="#fff" stroke-width="2"/>
+  <text x="420" y="285" font-family="monospace" font-size="8" fill="#4A7C59" text-anchor="end">185 lbs</text>
+  <!-- Stats sidebar -->
+  <rect x="446" y="90" width="240" height="92" fill="#fff" rx="6" stroke="#E0EAD8" stroke-width="1"/>
+  <rect x="446" y="90" width="240" height="4" fill="#E07A5F" rx="3"/>
+  <text x="460" y="112" font-family="system-ui,sans-serif" font-size="9" font-weight="700" fill="#1B3A2A">Current Stats</text>
+  <text x="460" y="132" font-family="system-ui,sans-serif" font-size="8" fill="#888">Starting Weight</text>
+  <text x="676" y="132" font-family="monospace" font-size="9" fill="#1B3A2A" text-anchor="end" font-weight="700">284 lbs</text>
+  <text x="460" y="148" font-family="system-ui,sans-serif" font-size="8" fill="#888">Lean Body Mass</text>
+  <text x="676" y="148" font-family="monospace" font-size="9" fill="#4A7C59" text-anchor="end" font-weight="700">185 lbs</text>
+  <text x="460" y="164" font-family="system-ui,sans-serif" font-size="8" fill="#888">Body Fat Mass</text>
+  <text x="676" y="164" font-family="monospace" font-size="9" fill="#E07A5F" text-anchor="end" font-weight="700">99 lbs</text>
+  <rect x="446" y="192" width="240" height="98" fill="#fff" rx="6" stroke="#E0EAD8" stroke-width="1"/>
+  <rect x="446" y="192" width="240" height="4" fill="#4A7C59" rx="3"/>
+  <text x="460" y="214" font-family="system-ui,sans-serif" font-size="9" font-weight="700" fill="#1B3A2A">Katch-McArdle TDEE</text>
+  <text x="460" y="234" font-family="system-ui,sans-serif" font-size="8" fill="#888">BMR (base metabolic rate)</text>
+  <text x="676" y="234" font-family="monospace" font-size="9" fill="#1B3A2A" text-anchor="end" font-weight="700">2,142 kcal</text>
+  <text x="460" y="252" font-family="system-ui,sans-serif" font-size="8" fill="#888">TDEE (moderate activity)</text>
+  <text x="676" y="252" font-family="monospace" font-size="9" fill="#4A7C59" text-anchor="end" font-weight="700">3,320 kcal</text>
+  <text x="460" y="270" font-family="system-ui,sans-serif" font-size="8" fill="#888">Daily deficit target</text>
+  <text x="676" y="270" font-family="monospace" font-size="9" fill="#E07A5F" text-anchor="end" font-weight="700">−750 kcal</text>
+  <rect x="460" y="276" width="210" height="6" fill="#EEF4EE" rx="3"/>
+  <rect x="460" y="276" width="140" height="6" fill="#4A7C59" rx="3"/>
+  <!-- Footer bar -->
+  <rect y="320" width="700" height="60" fill="#F0F4EE"/>
+  <rect y="320" width="700" height="1" fill="#E0EAD8"/>
+  <text x="24" y="344" font-family="system-ui,sans-serif" font-size="8" fill="#888">Goal Deadline</text>
+  <text x="24" y="358" font-family="system-ui,sans-serif" font-size="9" font-weight="700" fill="#1B3A2A">September 30, 2026</text>
+  <rect x="200" y="330" width="1" height="36" fill="#E0EAD8"/>
+  <text x="220" y="344" font-family="system-ui,sans-serif" font-size="8" fill="#888">Weight to Lose</text>
+  <text x="220" y="358" font-family="system-ui,sans-serif" font-size="9" font-weight="700" fill="#E07A5F">99 lbs remaining</text>
+  <rect x="400" y="330" width="1" height="36" fill="#E0EAD8"/>
+  <text x="420" y="344" font-family="system-ui,sans-serif" font-size="8" fill="#888">Weeks Remaining</text>
+  <text x="420" y="358" font-family="system-ui,sans-serif" font-size="9" font-weight="700" fill="#1B3A2A">~15 weeks</text>
+  <rect x="580" y="330" width="1" height="36" fill="#E0EAD8"/>
+  <text x="600" y="344" font-family="system-ui,sans-serif" font-size="8" fill="#888">Pace needed</text>
+  <text x="600" y="358" font-family="system-ui,sans-serif" font-size="9" font-weight="700" fill="#4A7C59">6.6 lbs/wk</text>
+</svg></div>
           <div class="proj-body">
+            <div class="proj-top">
+              <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+                <div class="proj-icon brass-icon">💪</div>
+                <div class="proj-num">PROJECT 02</div>
+              </div>
+            </div>
+            <div class="proj-title">Rooted Sila</div>
+            <div class="proj-stack">REACT · VITE · KATCH-MCARDLE · PWA</div>
+            <p class="proj-desc">A personal fitness PWA built around a concrete, time-bound body composition goal. The BOD POD baseline module uses the Katch-McArdle formula to calculate BMR and TDEE from lean body mass inputs, driving a fully personalized daily calorie and macro target. Interactive composition sliders and a live visualization bar translate validated exercise science into actionable daily guidance — all aimed at a significant weight loss target by September 2026.</p>
+            <div class="proj-tags">
+              <span class="proj-tag">Progressive Web App</span>
+              <span class="proj-tag">React Hooks</span>
+              <span class="proj-tag">Formula-Driven UI</span>
+              <span class="proj-tag">Body Composition</span>
+              <span class="proj-tag">Katch-McArdle</span>
+            </div>
+            <div class="proj-link-row">
+              <a href="#" class="proj-link ghost">Local Development</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="proj-card reveal">
+          <div class="proj-mockup"><svg viewBox="0 0 700 380" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;display:block;">
+  <rect width="700" height="380" fill="#FDF8F0"/>
+  <!-- Chrome -->
+  <rect width="700" height="32" fill="#2A2A2A"/>
+  <circle cx="16" cy="16" r="5" fill="#E05555"/>
+  <circle cx="32" cy="16" r="5" fill="#F0A020"/>
+  <circle cx="48" cy="16" r="5" fill="#4CAF50"/>
+  <rect x="68" y="8" width="490" height="16" fill="#3A3A3A" rx="2"/>
+  <text x="313" y="20" font-family="monospace" font-size="8" fill="#888" text-anchor="middle">BakeOS · Baking Assistant PWA</text>
+  <!-- App header -->
+  <rect y="32" width="700" height="50" fill="#3C1F0D"/>
+  <text x="24" y="64" font-family="Georgia,serif" font-size="22" font-weight="700" fill="#F5DEB3" letter-spacing="2">BakeOS</text>
+  <text x="108" y="64" font-family="system-ui,sans-serif" font-size="9" fill="rgba(245,222,179,0.4)">· BAKING ASSISTANT</text>
+  <!-- Nav tabs -->
+  <rect x="280" y="44" width="64" height="22" fill="rgba(245,222,179,0.15)" rx="3"/>
+  <text x="312" y="59" font-family="system-ui,sans-serif" font-size="8" fill="#F5DEB3" text-anchor="middle">📖 Recipes</text>
+  <rect x="350" y="44" width="64" height="22" fill="rgba(245,222,179,0.08)" rx="3"/>
+  <text x="382" y="59" font-family="system-ui,sans-serif" font-size="8" fill="rgba(245,222,179,0.6)" text-anchor="middle">💰 Pricing</text>
+  <rect x="420" y="44" width="64" height="22" fill="rgba(245,222,179,0.08)" rx="3"/>
+  <text x="452" y="59" font-family="system-ui,sans-serif" font-size="8" fill="rgba(245,222,179,0.6)" text-anchor="middle">📦 Inventory</text>
+  <rect x="490" y="44" width="64" height="22" fill="rgba(245,222,179,0.08)" rx="3"/>
+  <text x="522" y="59" font-family="system-ui,sans-serif" font-size="8" fill="rgba(245,222,179,0.6)" text-anchor="middle">⏱ Bake Mode</text>
+  <rect x="560" y="44" width="64" height="22" fill="rgba(245,222,179,0.08)" rx="3"/>
+  <text x="592" y="59" font-family="system-ui,sans-serif" font-size="8" fill="rgba(245,222,179,0.6)" text-anchor="middle">🤖 AI Chef</text>
+  <rect x="634" y="44" width="52" height="22" fill="#C4962A" rx="3"/>
+  <text x="660" y="59" font-family="system-ui,sans-serif" font-size="8" fill="#3C1F0D" text-anchor="middle" font-weight="700">+ New</text>
+  <!-- Content area -->
+  <!-- Search bar -->
+  <rect x="14" y="92" width="500" height="28" fill="#fff" rx="4" stroke="#E8D5B0" stroke-width="1"/>
+  <text x="30" y="111" font-family="system-ui,sans-serif" font-size="9" fill="#C4A882">🔍  Search recipes...</text>
+  <rect x="522" y="92" width="80" height="28" fill="#3C1F0D" rx="4"/>
+  <text x="562" y="111" font-family="system-ui,sans-serif" font-size="8" fill="#F5DEB3" text-anchor="middle">Filter ▾</text>
+  <rect x="610" y="92" width="76" height="28" fill="#B5C4A0" rx="4"/>
+  <text x="648" y="111" font-family="system-ui,sans-serif" font-size="8" fill="#3C1F0D" text-anchor="middle">Sort: Recent</text>
+  <!-- Recipe card 1 -->
+  <rect x="14" y="130" width="206" height="210" fill="#fff" rx="6" stroke="#E8D5B0" stroke-width="1"/>
+  <rect x="14" y="130" width="206" height="86" fill="#8B4513" rx="5"/>
+  <rect x="14" y="201" width="206" height="15" fill="#8B4513"/>
+  <text x="117" y="172" font-family="Georgia,serif" font-size="20" fill="rgba(255,255,255,0.15)" text-anchor="middle">🎂</text>
+  <text x="117" y="200" font-family="Georgia,serif" font-size="11" fill="#fff" text-anchor="middle" font-weight="700">Classic Birthday Cake</text>
+  <text x="26" y="234" font-family="system-ui,sans-serif" font-size="8" fill="#888">Vanilla sponge · Buttercream frosting</text>
+  <text x="26" y="252" font-family="system-ui,sans-serif" font-size="8" fill="#888">⏱ 2h 30m &nbsp;·&nbsp; 🍽 12 servings</text>
+  <line x1="26" y1="262" x2="204" y2="262" stroke="#E8D5B0" stroke-width="1"/>
+  <text x="26" y="278" font-family="system-ui,sans-serif" font-size="8" fill="#555">Cost per unit</text>
+  <text x="204" y="278" font-family="monospace" font-size="9" fill="#C4962A" text-anchor="end" font-weight="700">$2.84</text>
+  <text x="26" y="295" font-family="system-ui,sans-serif" font-size="8" fill="#555">Sell price</text>
+  <text x="204" y="295" font-family="monospace" font-size="9" fill="#4A7C59" text-anchor="end" font-weight="700">$48.00</text>
+  <rect x="26" y="305" width="80" height="22" fill="#3C1F0D" rx="3"/>
+  <text x="66" y="319" font-family="system-ui,sans-serif" font-size="7" fill="#F5DEB3" text-anchor="middle">Bake Mode →</text>
+  <rect x="114" y="305" width="80" height="22" fill="#F0EAE0" rx="3"/>
+  <text x="154" y="319" font-family="system-ui,sans-serif" font-size="7" fill="#3C1F0D" text-anchor="middle">Edit Recipe</text>
+  <!-- Recipe card 2 -->
+  <rect x="230" y="130" width="206" height="210" fill="#fff" rx="6" stroke="#E8D5B0" stroke-width="1"/>
+  <rect x="230" y="130" width="206" height="86" fill="#6B4423" rx="5"/>
+  <rect x="230" y="201" width="206" height="15" fill="#6B4423"/>
+  <text x="333" y="172" font-family="Georgia,serif" font-size="20" fill="rgba(255,255,255,0.15)" text-anchor="middle">🍞</text>
+  <text x="333" y="200" font-family="Georgia,serif" font-size="11" fill="#fff" text-anchor="middle" font-weight="700">Sourdough Boule</text>
+  <text x="242" y="234" font-family="system-ui,sans-serif" font-size="8" fill="#888">Country sourdough · 78% hydration</text>
+  <text x="242" y="252" font-family="system-ui,sans-serif" font-size="8" fill="#888">⏱ 24h &nbsp;·&nbsp; 🍽 1 loaf</text>
+  <line x1="242" y1="262" x2="420" y2="262" stroke="#E8D5B0" stroke-width="1"/>
+  <text x="242" y="278" font-family="system-ui,sans-serif" font-size="8" fill="#555">Cost per unit</text>
+  <text x="420" y="278" font-family="monospace" font-size="9" fill="#C4962A" text-anchor="end" font-weight="700">$1.22</text>
+  <text x="242" y="295" font-family="system-ui,sans-serif" font-size="8" fill="#555">Sell price</text>
+  <text x="420" y="295" font-family="monospace" font-size="9" fill="#4A7C59" text-anchor="end" font-weight="700">$12.00</text>
+  <rect x="242" y="305" width="80" height="22" fill="#3C1F0D" rx="3"/>
+  <text x="282" y="319" font-family="system-ui,sans-serif" font-size="7" fill="#F5DEB3" text-anchor="middle">Bake Mode →</text>
+  <rect x="330" y="305" width="80" height="22" fill="#F0EAE0" rx="3"/>
+  <text x="370" y="319" font-family="system-ui,sans-serif" font-size="7" fill="#3C1F0D" text-anchor="middle">Edit Recipe</text>
+  <!-- Recipe card 3 -->
+  <rect x="446" y="130" width="240" height="210" fill="#fff" rx="6" stroke="#E8D5B0" stroke-width="1"/>
+  <rect x="446" y="130" width="240" height="86" fill="#5C3317" rx="5"/>
+  <rect x="446" y="201" width="240" height="15" fill="#5C3317"/>
+  <text x="566" y="172" font-family="Georgia,serif" font-size="20" fill="rgba(255,255,255,0.15)" text-anchor="middle">🍪</text>
+  <text x="566" y="200" font-family="Georgia,serif" font-size="11" fill="#fff" text-anchor="middle" font-weight="700">Choc Chip Cookies (dz)</text>
+  <text x="458" y="234" font-family="system-ui,sans-serif" font-size="8" fill="#888">Brown butter · Sea salt finish</text>
+  <text x="458" y="252" font-family="system-ui,sans-serif" font-size="8" fill="#888">⏱ 45m &nbsp;·&nbsp; 🍽 12 cookies</text>
+  <line x1="458" y1="262" x2="674" y2="262" stroke="#E8D5B0" stroke-width="1"/>
+  <text x="458" y="278" font-family="system-ui,sans-serif" font-size="8" fill="#555">Cost per dozen</text>
+  <text x="674" y="278" font-family="monospace" font-size="9" fill="#C4962A" text-anchor="end" font-weight="700">$3.10</text>
+  <text x="458" y="295" font-family="system-ui,sans-serif" font-size="8" fill="#555">Sell price</text>
+  <text x="674" y="295" font-family="monospace" font-size="9" fill="#4A7C59" text-anchor="end" font-weight="700">$18.00</text>
+  <rect x="458" y="305" width="90" height="22" fill="#3C1F0D" rx="3"/>
+  <text x="503" y="319" font-family="system-ui,sans-serif" font-size="7" fill="#F5DEB3" text-anchor="middle">Bake Mode →</text>
+  <rect x="556" y="305" width="108" height="22" fill="#F0EAE0" rx="3"/>
+  <text x="610" y="319" font-family="system-ui,sans-serif" font-size="7" fill="#3C1F0D" text-anchor="middle">Edit Recipe</text>
+  <!-- Footer strip -->
+  <rect y="350" width="700" height="30" fill="#F5ECD8" stroke-top="#E8D5B0"/>
+  <rect y="350" width="700" height="1" fill="#E8D5B0"/>
+  <text x="14" y="368" font-family="system-ui,sans-serif" font-size="7" fill="#888">📍 Location pricing: Vicenza, IT &nbsp;·&nbsp; 🧾 14 recipes &nbsp;·&nbsp; 📦 Inventory: 23 items &nbsp;·&nbsp; 🤖 AI Kitchen Assistant ready</text>
+</svg></div>
+          <div class="proj-body">
+            <div class="proj-top">
+              <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+                <div class="proj-icon muted-icon">🍞</div>
+                <div class="proj-num">PROJECT 03</div>
+              </div>
+            </div>
             <div class="proj-title">BakeOS</div>
             <div class="proj-stack">VANILLA JS · POUCHDB · BARCODE API · AI INTEGRATION</div>
-            <p class="proj-desc">A full-featured baking assistant PWA bridging entrepreneurial operations and software engineering. Includes a live pricing calculator, barcode-scanned inventory, AI kitchen assistant, web recipe import, location-based pricing, and a baking mode with step-by-step timers. Built with a cohesive design system in Espresso, Cream, Gold, Sage, and Rose.</p>
+            <p class="proj-desc">A full-featured baking assistant PWA bridging entrepreneurial operations and software development. Includes a live pricing calculator that computes cost-per-unit and suggested retail price per recipe, barcode-scanned smart inventory, an AI kitchen assistant for substitutions and technique guidance, web recipe import, location-based ingredient pricing, and a step-by-step baking mode with timers. Built with a cohesive design system in Espresso, Cream, Gold, Sage, and Rose with Playfair Display typography.</p>
             <div class="proj-tags">
               <span class="proj-tag">Entrepreneurial Tool</span>
               <span class="proj-tag">AI Integration</span>
               <span class="proj-tag">Barcode Scanning</span>
               <span class="proj-tag">Design System</span>
               <span class="proj-tag">PWA</span>
+              <span class="proj-tag">Live Pricing</span>
+            </div>
+            <div class="proj-link-row">
+              <a href="#" class="proj-link ghost">Local Development</a>
             </div>
           </div>
         </div>
 
       </div>
-    </div>
-  </section>
 
-  <!-- EDUCATION -->
-  <section id="education">
-    <div class="section-inner">
-      <div class="section-label reveal">// 05 — Education</div>
-      <h2 class="reveal">Academic <span class="dim">Background</span></h2>
-      <div class="edu-grid">
-        <div class="edu-card reveal">
-          <div class="edu-degree">B.S. Applied Science — Cybersecurity Concentration</div>
-          <div class="edu-inst">University of Maryland Global Campus (UMGC)</div>
-          <div class="edu-detail">Final course in progress. Capstone project: Squadron Manning Board — a production-quality personnel readiness web application demonstrating full-stack software engineering, security design, and documentation.</div>
-        </div>
-        <div class="edu-card brass-left reveal">
-          <div class="edu-degree">Associate of Arts, Management</div>
-          <div class="edu-inst">In Progress</div>
-          <div class="edu-detail">Complementary business and organizational management studies supporting a career trajectory into IT leadership and security program management.</div>
-        </div>
-        <div class="edu-card brass-left reveal">
-          <div class="edu-degree">Food Defense Coordinator · Ag / Food Science</div>
-          <div class="edu-inst">AIB International</div>
-          <div class="edu-detail">Specialized training in food safety systems, microbiology, and defense protocols — grounding entrepreneurial pursuits in regulatory and scientific rigor.</div>
-        </div>
-        <div class="edu-card reveal">
-          <div class="edu-degree">Contracting Studies</div>
-          <div class="edu-inst">Federal Acquisition Institute · Defense Acquisition University</div>
-          <div class="edu-detail">Federal acquisition and contracting fundamentals, including FAR compliance, price analysis, and contract administration — directly applicable to government IT procurement and vendor management roles.</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- CONTACT -->
-  <section id="contact">
-    <div class="section-inner contact-inner">
-      <div class="section-label reveal">// 06 — Contact</div>
-      <h2 class="reveal">Let's <span class="dim">Connect</span></h2>
-      <p class="reveal">Available for cybersecurity roles, IT leadership opportunities, and professional conversations. Based in Italy (APO AE) — open to remote and DoD/federal positions worldwide.</p>
-      <div class="contact-links reveal">
-        <a href="mailto:Nlong6@student.umgc.edu" class="contact-btn btn-teal">Email Me</a>
-        <a href="https://www.linkedin.com/in/nathaniel-long-a674a293/" class="contact-btn btn-ghost" target="_blank" rel="noopener">LinkedIn</a>
-        <a href="https://xavielpendragon.github.io/APTC-495-Squadron-Manning-Board/" class="contact-btn btn-ghost" target="_blank" rel="noopener">GitHub</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- FOOTER -->
-  <footer>
-    <span class="footer-text">© 2026 Nathaniel C. Long &nbsp;|&nbsp; APTC 495 Personal Portfolio &nbsp;|&nbsp; UMGC</span>
-    <span class="footer-text"><a href="#hero" style="color:var(--muted);">↑ Back to top</a></span>
-  </footer>
-
-  <script>
-    // ── Typewriter ────────────────────────────────────────────────
-    const lines = [
-      "cat ./about-me.md",
-      "git log --oneline --all",
-      "npm run build -- --mode production",
-      "echo 'Security+ certification in progress...'",
-    ];
-    let li = 0, ci = 0, deleting = false;
-    const tw = document.getElementById('typewriter');
-    function type() {
-      const line = lines[li];
-      if (!deleting) {
-        tw.textContent = line.slice(0, ++ci);
-        if (ci === line.length) { deleting = true; setTimeout(type, 2200); return; }
-      } else {
-        tw.textContent = line.slice(0, --ci);
-        if (ci === 0) { deleting = false; li = (li + 1) % lines.length; setTimeout(type, 400); return; }
-      }
-      setTimeout(type, deleting ? 28 : 60);
-    }
-    setTimeout(type, 1200);
-
-    // ── Scroll reveal ─────────────────────────────────────────────
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-    }, { threshold: 0.1 });
-    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-  </script>
-</body>
-</html>
