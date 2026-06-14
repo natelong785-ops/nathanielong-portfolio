@@ -1119,3 +1119,85 @@
 
       </div>
 
+
+  <!-- EDUCATION -->
+  <section id="education">
+    <div class="section-inner">
+      <div class="section-label reveal">// 05 — Education</div>
+      <h2 class="reveal">Academic <span class="dim">Background</span></h2>
+      <div class="edu-grid">
+        <div class="edu-card reveal">
+          <div class="edu-degree">B.S. Applied Science — Cybersecurity Concentration</div>
+          <div class="edu-inst">University of Maryland Global Campus (UMGC)</div>
+          <div class="edu-detail">Final course in progress. Capstone project: Squadron Manning Board — a production-quality personnel readiness web application demonstrating full-stack software engineering, security design, and documentation.</div>
+        </div>
+        <div class="edu-card brass-left reveal">
+          <div class="edu-degree">Associate of Arts, Management</div>
+          <div class="edu-inst">In Progress</div>
+          <div class="edu-detail">Complementary business and organizational management studies supporting a career trajectory into IT leadership and security program management.</div>
+        </div>
+        <div class="edu-card brass-left reveal">
+          <div class="edu-degree">Food Defense Coordinator · Ag / Food Science</div>
+          <div class="edu-inst">AIB International</div>
+          <div class="edu-detail">Specialized training in food safety systems, microbiology, and defense protocols — grounding entrepreneurial pursuits in regulatory and scientific rigor.</div>
+        </div>
+        <div class="edu-card reveal">
+          <div class="edu-degree">Contracting Studies</div>
+          <div class="edu-inst">Federal Acquisition Institute · Defense Acquisition University</div>
+          <div class="edu-detail">Federal acquisition and contracting fundamentals, including FAR compliance, price analysis, and contract administration — directly applicable to government IT procurement and vendor management roles.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="section-inner contact-inner">
+      <div class="section-label reveal">// 06 — Contact</div>
+      <h2 class="reveal">Let's <span class="dim">Connect</span></h2>
+      <p class="reveal">Available for cybersecurity roles, IT leadership opportunities, and professional conversations. Based in Italy (APO AE) — open to remote and DoD/federal positions worldwide.</p>
+      <div class="contact-links reveal">
+        <a href="mailto:Nathaniel.c.long@gmail.com" class="contact-btn btn-teal">Email Me</a>
+        <a href="https://www.linkedin.com/in/nathaniel-long-a674a293/" class="contact-btn btn-ghost" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://github.com/natelong785-ops" class="contact-btn btn-ghost" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <span class="footer-text">© 2026 Nathaniel C. Long &nbsp;|&nbsp; APTC 495 Personal Portfolio &nbsp;|&nbsp; UMGC</span>
+    <span class="footer-text"><a href="#hero" style="color:var(--muted);">↑ Back to top</a></span>
+  </footer>
+
+  <script>
+    // ── Typewriter ────────────────────────────────────────────────
+    const lines = [
+      "cat ./about-me.md",
+      "git log --oneline --all",
+      "npm run build -- --mode production",
+      "echo 'Security+ certification in progress...'",
+    ];
+    let li = 0, ci = 0, deleting = false;
+    const tw = document.getElementById('typewriter');
+    function type() {
+      const line = lines[li];
+      if (!deleting) {
+        tw.textContent = line.slice(0, ++ci);
+        if (ci === line.length) { deleting = true; setTimeout(type, 2200); return; }
+      } else {
+        tw.textContent = line.slice(0, --ci);
+        if (ci === 0) { deleting = false; li = (li + 1) % lines.length; setTimeout(type, 400); return; }
+      }
+      setTimeout(type, deleting ? 28 : 60);
+    }
+    setTimeout(type, 1200);
+
+    // ── Scroll reveal ─────────────────────────────────────────────
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>
