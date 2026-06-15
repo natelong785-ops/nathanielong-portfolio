@@ -418,6 +418,20 @@
     .proj-card:nth-child(2) .proj-stack { color: var(--brass); }
     .proj-card:nth-child(3) .proj-stack { color: var(--muted); }
     .proj-desc { font-size: 0.87rem; color: var(--muted); line-height: 1.65; flex: 1; }
+    .proj-meta {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem;
+      margin-top: 1rem; padding: 0.9rem 1rem;
+      background: rgba(13,212,196,0.04);
+      border: 1px solid rgba(13,212,196,0.12);
+      border-radius: 4px;
+    }
+    .proj-meta-item { display: flex; flex-direction: column; gap: 0.2rem; }
+    .proj-meta-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.6rem; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--teal);
+    }
+    .proj-meta-value { font-size: 0.82rem; color: var(--text); line-height: 1.5; }
     .proj-tags {
       display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 1.2rem;
     }
@@ -879,6 +893,16 @@
             <div class="proj-title">Squadron Manning Board</div>
             <div class="proj-stack">ES MODULES · POUCHDB · COUCHDB · HTML/CSS</div>
             <p class="proj-desc">A local-first web application for Air Force squadron personnel tracking and unit readiness visibility. Built across eight modular JavaScript ES modules with role-based access control, drag-and-drop assignment management, activity logging, idle session timeouts, CSV import/export, and mobile touch support. Resolved a complex circular module dependency that caused silent startup failures — restoring full application functionality and delivering a production-ready capstone artifact on schedule.</p>
+            <div class="proj-meta">
+              <div class="proj-meta-item">
+                <span class="proj-meta-label">My Role</span>
+                <span class="proj-meta-value">Co-lead developer on a 5-person team — primary responsibility for software architecture, module implementation, debugging, and technical documentation alongside one other developer, with teammates contributing research, design, testing, and project documentation.</span>
+              </div>
+              <div class="proj-meta-item">
+                <span class="proj-meta-label">Outcome</span>
+                <span class="proj-meta-value">Delivered a production-ready capstone prototype on schedule, resolving a critical circular dependency and meeting all APTC 495 project requirements.</span>
+              </div>
+            </div>
             <div class="proj-tags">
               <span class="proj-tag">Offline-First</span>
               <span class="proj-tag">RBAC</span>
@@ -989,6 +1013,16 @@
             <div class="proj-title">Rooted Sila</div>
             <div class="proj-stack">REACT · VITE · KATCH-MCARDLE · PWA</div>
             <p class="proj-desc">A personal fitness PWA built around a concrete, time-bound body composition goal. The BOD POD baseline module uses the Katch-McArdle formula to calculate BMR and TDEE from lean body mass inputs, driving a fully personalized daily calorie and macro target. Interactive composition sliders and a live visualization bar translate validated exercise science into actionable daily guidance — all aimed at a significant weight loss target by September 2026.</p>
+            <div class="proj-meta">
+              <div class="proj-meta-item">
+                <span class="proj-meta-label">My Role</span>
+                <span class="proj-meta-value">Sole developer and product owner — concept, UI/UX design, React component architecture, and formula implementation from scratch.</span>
+              </div>
+              <div class="proj-meta-item">
+                <span class="proj-meta-label">Outcome</span>
+                <span class="proj-meta-value">Deployed a fully functional fitness PWA on Netlify with live body composition tracking, personalized TDEE calculations, and installable offline support.</span>
+              </div>
+            </div>
             <div class="proj-tags">
               <span class="proj-tag">Progressive Web App</span>
               <span class="proj-tag">React Hooks</span>
@@ -1116,6 +1150,16 @@
             <div class="proj-title">BakeOS</div>
             <div class="proj-stack">VANILLA JS · POUCHDB · BARCODE API · AI INTEGRATION</div>
             <p class="proj-desc">A full-featured baking assistant PWA bridging entrepreneurial operations and software development. Includes a live pricing calculator that computes cost-per-unit and suggested retail price per recipe, barcode-scanned smart inventory, an AI kitchen assistant for substitutions and technique guidance, web recipe import, location-based ingredient pricing, and a step-by-step baking mode with timers. Built with a cohesive design system in Espresso, Cream, Gold, Sage, and Rose with Playfair Display typography.</p>
+            <div class="proj-meta">
+              <div class="proj-meta-item">
+                <span class="proj-meta-label">My Role</span>
+                <span class="proj-meta-value">Sole developer and designer — full product concept, design system, feature development, API integrations, and PWA configuration end to end.</span>
+              </div>
+              <div class="proj-meta-item">
+                <span class="proj-meta-label">Outcome</span>
+                <span class="proj-meta-value">Shipped a self-contained 165KB single-file PWA combining recipe management, live cost analysis, AI assistance, and barcode inventory in one deployable tool.</span>
+              </div>
+            </div>
             <div class="proj-tags">
               <span class="proj-tag">Entrepreneurial Tool</span>
               <span class="proj-tag">AI Integration</span>
@@ -1172,7 +1216,7 @@
       <div class="contact-links reveal">
         <a href="mailto:Nathaniel.c.long@gmail.com" class="contact-btn btn-teal">Email Me</a>
         <a href="https://www.linkedin.com/in/nathaniel-long-a674a293/" class="contact-btn btn-ghost" target="_blank" rel="noopener">LinkedIn</a>
-        <a href="https://github.com/natelong785-ops" class="contact-btn btn-ghost" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://xavielpendragon.github.io/APTC-495-Squadron-Manning-Board/" class="contact-btn btn-ghost" target="_blank" rel="noopener">GitHub</a>
       </div>
     </div>
   </section>
